@@ -3,6 +3,8 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2017
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Unity.TextMeshPro", "Unity.TextMeshPro.csproj", "{07A21C90-D344-AE1A-8456-9910C203B41A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Z Nation", "Z Nation.csproj", "{C9DEB65D-C874-C409-1233-2A9F26D9C14B}"
+EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Unity.PackageManagerUI.Editor", "Unity.PackageManagerUI.Editor.csproj", "{6877705C-FBD9-0C4F-5AFB-6FB431E5D39D}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Unity.TextMeshPro.Editor", "Unity.TextMeshPro.Editor.csproj", "{3A848AB7-9891-EDDA-D555-BF184C2F81F4}"
@@ -10,6 +12,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Unity.CollabProxy.Editor", "Unity.CollabProxy.Editor.csproj", "{C12CEEC6-100C-58A2-DE36-314E4DE5E40B}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Unity.Analytics.Android.Editor", "Unity.Analytics.Android.Editor.csproj", "{1DAFA655-A0D1-7D0E-9403-558A7B5754C5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Z Nation.Editor", "Z Nation.Editor.csproj", "{8B6F1DAC-C192-C985-CCBC-60EF5580D0BF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +25,10 @@ Global
 		{07A21C90-D344-AE1A-8456-9910C203B41A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{07A21C90-D344-AE1A-8456-9910C203B41A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{07A21C90-D344-AE1A-8456-9910C203B41A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C9DEB65D-C874-C409-1233-2A9F26D9C14B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C9DEB65D-C874-C409-1233-2A9F26D9C14B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C9DEB65D-C874-C409-1233-2A9F26D9C14B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C9DEB65D-C874-C409-1233-2A9F26D9C14B}.Release|Any CPU.Build.0 = Release|Any CPU
 		{6877705C-FBD9-0C4F-5AFB-6FB431E5D39D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{6877705C-FBD9-0C4F-5AFB-6FB431E5D39D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6877705C-FBD9-0C4F-5AFB-6FB431E5D39D}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -37,6 +45,10 @@ Global
 		{1DAFA655-A0D1-7D0E-9403-558A7B5754C5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1DAFA655-A0D1-7D0E-9403-558A7B5754C5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1DAFA655-A0D1-7D0E-9403-558A7B5754C5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8B6F1DAC-C192-C985-CCBC-60EF5580D0BF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8B6F1DAC-C192-C985-CCBC-60EF5580D0BF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8B6F1DAC-C192-C985-CCBC-60EF5580D0BF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8B6F1DAC-C192-C985-CCBC-60EF5580D0BF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
