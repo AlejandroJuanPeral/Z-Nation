@@ -7,8 +7,8 @@ public class Grid : MonoBehaviour
 {
     public bool gizmoActivate;
 
-    public Color colorReachable;
-    public Color colorUnreachable;
+    public Color colorNormal;
+    public Color colorUnwalkable;
 
     private Renderer renderNodePrefab;
 
@@ -48,14 +48,15 @@ public class Grid : MonoBehaviour
                 bool walkable = !(Physics.CheckSphere(worldPoint, nodeRadius, unwalkableMask));
                 grid[x, y] = new Nodo(walkable, worldPoint, x, y);
                 GameObject aux = Instantiate(prefabNode, worldPoint, Quaternion.identity);
+
                 renderNodePrefab = aux.GetComponent<Renderer>();
                 if(walkable == false)
                 {
-                    renderNodePrefab.material.color = colorUnreachable;
+                    renderNodePrefab.material.color = colorUnwalkable;
                 }
                 else
                 {
-                    renderNodePrefab.material.color = colorReachable;
+                    renderNodePrefab.material.color = colorNormal;
                 }
             }
         }

@@ -4,8 +4,7 @@ using UnityEngine;
 
 public class Nodo 
 {
-    [SerializeField]
-    public List<Nodo> neighbors;
+   
 
     public GameObject prefab;
 
@@ -18,8 +17,8 @@ public class Nodo
     public int hCost;
     public Nodo parent;
 
-    private Grid grid;
-    private Nodo[,] gridOfNodos;
+
+
 
     public Nodo(bool a_IsWall, Vector3 _worldPos, int _gridX, int _gridY)
     {
