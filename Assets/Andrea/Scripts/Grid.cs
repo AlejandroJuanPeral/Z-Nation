@@ -48,6 +48,9 @@ public class Grid : MonoBehaviour
                 bool walkable = !(Physics.CheckSphere(worldPoint, nodeRadius, unwalkableMask));
                 grid[x, y] = new Nodo(walkable, worldPoint, x, y);
                 GameObject aux = Instantiate(prefabNode, worldPoint, Quaternion.identity);
+                
+                grid[x, y].prefab = aux;
+                
 
                 renderNodePrefab = aux.GetComponent<Renderer>();
                 if(walkable == false)
