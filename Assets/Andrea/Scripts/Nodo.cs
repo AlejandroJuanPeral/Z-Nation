@@ -19,6 +19,8 @@ public class Nodo
     public int hCost;
     public Nodo parent;
 
+    public int resourceCost;
+
 
 
 
@@ -28,6 +30,9 @@ public class Nodo
         worldPosition = _worldPos;
         gridX = _gridX;
         gridY = _gridY;
+
+
+        resourceCost = -1;
     }
 
     public int fCost

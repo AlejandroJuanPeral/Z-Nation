@@ -20,11 +20,14 @@ public class EnemyMovement : MonoBehaviour
 
     Queue<Nodo> cola;
 
+    int index;
+
     // Start is called before the first frame update
     void Start()
     {
         grid = GameObject.Find("GameManager").GetComponent<Grid>();
         allVisible = new List<Nodo>();
+        index = 0;
 
         actual = grid.NodeFromWorldPoint(transform.position);
         vecinos = grid.GetNeighbours(actual);
@@ -36,8 +39,8 @@ public class EnemyMovement : MonoBehaviour
 
         aux = VisitingNeighbours(actual);
 
-        EnemyVisibility();
-        
+        //EnemyVisibility();
+
         
     }
 
@@ -56,13 +59,7 @@ public class EnemyMovement : MonoBehaviour
 
         VisitingNeighbours(actual);
 
-        for (int i = 0; i < EnemyStats.cantidadMovimientos; i++)
-        {
-
-            Nodo n = cola.Dequeue();
-
-            VisitingNeighbours(n);
-        }
+        
 
         cola.Clear();
         
@@ -71,6 +68,7 @@ public class EnemyMovement : MonoBehaviour
 
     void ResetAllVisibles()
     {
+        
         foreach(Nodo n in allVisible)
         {
             n.prefab.GetComponent<Renderer>().material.color = Color.grey;
@@ -79,7 +77,10 @@ public class EnemyMovement : MonoBehaviour
 
     List<Nodo> VisitingNeighbours(Nodo n)
     {
-        List<Nodo> aux = grid.GetNeighbours(n);
+        //List<Nodo> aux = grid.GetNeighbours(n);
+        List<Nodo> aux = grid.GetNeighboursInLevel(n, EnemyStats.cantidadMovimientos);
+
+
         for (int i = 0; i < aux.Count; i++)
         {
             if(aux[i].prefab.GetComponent<Renderer>().material.color == Color.green)
@@ -91,15 +92,21 @@ public class EnemyMovement : MonoBehaviour
                 aux[i].prefab.GetComponent<Renderer>().material.color = Color.green;
                 allVisible.Add(aux[i]);
                 cola.Enqueue(aux[i]);
+               
             }
         }
+        
         return aux;
     }
 
     // Update is called once per frame
     void Update()
     {
+
+        //VisitingNeighbours(actual);
         EnemyVisibility();
+
+        
         
     }
 }

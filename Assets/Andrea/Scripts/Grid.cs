@@ -96,6 +96,31 @@ public class Grid : MonoBehaviour
     }
 
 
+    public List<Nodo> GetNeighboursInLevel(Nodo node, int level)
+    {
+        List<Nodo> neighbours = new List<Nodo>();
+
+        for (int x = (-1)* level; x <= level; x++)
+        {
+            for (int y = (-1) * level; y <= level; y++)
+            {
+                if (x == 0 && y == 0)
+                    continue;
+
+                int checkX = node.gridX + x;
+                int checkY = node.gridY + y;
+
+                if (checkX >= 0 && checkX < gridSizeX && checkY >= 0 && checkY < gridSizeY)
+                {
+                    neighbours.Add(grid[checkX, checkY]);
+                }
+            }
+        }
+
+        return neighbours;
+    }
+
+
     public Nodo NodeFromWorldPoint(Vector3 worldPosition)
     {
         float percentX = (worldPosition.x + gridWorldSize.x / 2) / gridWorldSize.x;
