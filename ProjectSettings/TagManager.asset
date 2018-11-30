@@ -5,6 +5,12 @@ TagManager:
   serializedVersion: 2
   tags:
   - Nodo
+  - City
+  - Unit
+  - Enemy
+  - Zombie
+  - Food
+  - Construct
   layers:
   - Default
   - TransparentFX
