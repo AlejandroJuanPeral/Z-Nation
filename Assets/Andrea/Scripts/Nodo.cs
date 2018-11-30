@@ -37,4 +37,15 @@ public class Nodo
             return gCost + hCost;
         }
     }
+
+    //Para tener la distancia del nodo en el que estamos al nodo que queramos
+    public int GetDistance(Nodo nodeB)
+    {
+        int dstX = Mathf.Abs(this.gridX - nodeB.gridX);
+        int dstY = Mathf.Abs(this.gridY - nodeB.gridY);
+
+        if (dstX > dstY)
+            return 14 * dstY + 10 * (dstX - dstY);
+        return 14 * dstX + 10 * (dstY - dstX);
+    }
 }

@@ -5,7 +5,7 @@ using UnityEngine;
 public class EnemyStats : MonoBehaviour
 {
 
-    public static int cantidadMovimientos = 5;
+    public static int cantidadMovimientos = 20;
 
     // Start is called before the first frame update
     void Start()

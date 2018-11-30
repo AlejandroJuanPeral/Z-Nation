@@ -16,38 +16,66 @@ public class EnemyMovement : MonoBehaviour
 
     int levelIndex = 0;
 
+    Nodo actual;
+
+    Queue<Nodo> cola;
+
     // Start is called before the first frame update
     void Start()
     {
         grid = GameObject.Find("GameManager").GetComponent<Grid>();
         allVisible = new List<Nodo>();
 
-        Nodo actual = grid.NodeFromWorldPoint(transform.position);
+        actual = grid.NodeFromWorldPoint(transform.position);
         vecinos = grid.GetNeighbours(actual);
 
+        List<Nodo> aux = new List<Nodo>();
+        List<Nodo> aux2 = new List<Nodo>();
 
-        for (int i = 0; i < vecinos.Count; i++)
-        {
-            allVisible.Add(vecinos[i]);
-            VisitingNeighbours(vecinos[i]);
+        cola = new Queue<Nodo>();
 
-        }
-        levelIndex++; //Nivel de anchura
+        aux = VisitingNeighbours(actual);
 
-       /* while(aux <= EnemyStats.cantidadMovimientos)
-        {
-            for (int i = 0; i < vecinos.Count; i++)
-            {
-
-                vecinos[i].prefab.GetComponent<Renderer>().material.color = Color.green;
-
-            }
-            actual = vecinos[vecinos.Count - 1];
-            aux++;
-            vecinos = grid.GetNeighbours(actual);
-        }*/
+        EnemyVisibility();
+        
         
     }
+
+    void EnemyVisibility()
+    {
+
+        if(allVisible.Count > 0)
+        {
+            //Reiniciamos
+            Debug.Log("Hay que reiniciar los visible");
+            ResetAllVisibles();
+        }
+        
+        allVisible.Clear();
+        actual = grid.NodeFromWorldPoint(transform.position);
+
+        VisitingNeighbours(actual);
+
+        for (int i = 0; i < EnemyStats.cantidadMovimientos; i++)
+        {
+
+            Nodo n = cola.Dequeue();
+
+            VisitingNeighbours(n);
+        }
+
+        cola.Clear();
+        
+        
+    }
+
+    void ResetAllVisibles()
+    {
+        foreach(Nodo n in allVisible)
+        {
+            n.prefab.GetComponent<Renderer>().material.color = Color.grey;
+        }
+    } 
 
     List<Nodo> VisitingNeighbours(Nodo n)
     {
@@ -62,6 +90,7 @@ public class EnemyMovement : MonoBehaviour
             {
                 aux[i].prefab.GetComponent<Renderer>().material.color = Color.green;
                 allVisible.Add(aux[i]);
+                cola.Enqueue(aux[i]);
             }
         }
         return aux;
@@ -70,6 +99,7 @@ public class EnemyMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        EnemyVisibility();
         
     }
 }
