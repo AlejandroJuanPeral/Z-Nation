@@ -20,6 +20,9 @@ public class Moving : MonoBehaviour
 
     private MovingManager movingManager;
 
+
+    Grid grid;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -27,6 +30,8 @@ public class Moving : MonoBehaviour
         startColor = rend.material.color;
 
         movingManager = MovingManager.instance;
+
+        grid = GameObject.Find("GameManager").GetComponent<Grid>();
     }
 
     public Vector3 GetMovePosition()
@@ -47,12 +52,20 @@ public class Moving : MonoBehaviour
         }
 
         //Comprobaciones para moverse
-
+        rend.material.color = Color.cyan;
         movingManager.MoveOn(this);
     }
 
     private void OnMouseExit()
     {
+        Vector3 pos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+
+        Nodo n = grid.NodeFromWorldPoint(pos);
+
+        if (n.isVisibleEnemy)
+        {
+            return;
+        }
         //rend.material.color = Color.blue;
         rend.material.color = startColor;
     }
@@ -65,10 +78,21 @@ public class Moving : MonoBehaviour
             return;
         }
 
-      // if (!moving.CanMove)
-      // {
-      //     return;
-      // }
+        // if (!moving.CanMove)
+        // {
+        //     return;
+        // }
+
+
+        Vector3 pos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+
+        Nodo n = grid.NodeFromWorldPoint(pos);
+        Debug.Log(n.isVisibleEnemy);
+
+        if (n.isVisibleEnemy)
+        {
+            return;
+        }
 
         rend.material.color = unreachable;
 

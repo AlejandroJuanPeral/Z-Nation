@@ -21,6 +21,11 @@ public class Nodo
 
     public int resourceCost;
 
+    public GameObject objectInNode;
+
+    public bool isVisibleEnemy;
+    public bool isVisiblePlayer;
+
 
 
 
@@ -33,6 +38,10 @@ public class Nodo
 
 
         resourceCost = -1;
+        objectInNode = null;
+
+        isVisibleEnemy = false;
+        isVisiblePlayer = false;
     }
 
     public int fCost

@@ -7,6 +7,8 @@ public class EnemyMovement : MonoBehaviour
 
     //Lanzar una búsqueda en anchura en varios niveles hasta la visualización indicada en EnemyStats
     //En esa búsqueda, buscar el nodo con mayor peso
+    public Color colorReachable;
+    public Color pathColor;
 
     Grid grid;
 
@@ -37,7 +39,7 @@ public class EnemyMovement : MonoBehaviour
 
         cola = new Queue<Nodo>();
 
-        aux = VisitingNeighbours(actual);
+        //aux = VisitingNeighbours(actual);
 
         //EnemyVisibility();
 
@@ -56,6 +58,7 @@ public class EnemyMovement : MonoBehaviour
         
         allVisible.Clear();
         actual = grid.NodeFromWorldPoint(transform.position);
+        actual.prefab.GetComponent<Renderer>().material.color = pathColor;
 
         VisitingNeighbours(actual);
 
@@ -72,6 +75,7 @@ public class EnemyMovement : MonoBehaviour
         foreach(Nodo n in allVisible)
         {
             n.prefab.GetComponent<Renderer>().material.color = Color.grey;
+            n.isVisibleEnemy = true;
         }
     } 
 
@@ -83,14 +87,15 @@ public class EnemyMovement : MonoBehaviour
 
         for (int i = 0; i < aux.Count; i++)
         {
-            if(aux[i].prefab.GetComponent<Renderer>().material.color == Color.green)
+            if(aux[i].prefab.GetComponent<Renderer>().material.color == colorReachable)
             {
                 continue;
             }
             else
             {
-                aux[i].prefab.GetComponent<Renderer>().material.color = Color.green;
+                aux[i].prefab.GetComponent<Renderer>().material.color = colorReachable;
                 allVisible.Add(aux[i]);
+                aux[i].isVisibleEnemy = true;
                 cola.Enqueue(aux[i]);
                
             }

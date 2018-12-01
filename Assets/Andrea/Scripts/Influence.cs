@@ -11,6 +11,8 @@ public class Influence : MonoBehaviour
     Grid grid;
     Nodo actual;
 
+    
+
 
     // Start is called before the first frame update
     void Start()
@@ -20,6 +22,9 @@ public class Influence : MonoBehaviour
         actual = grid.NodeFromWorldPoint(transform.position);
 
         actual.resourceCost = (int) typeResource;
+
+        actual.objectInNode = this.gameObject;
+
 
         actual.prefab.GetComponent<Renderer>().material.color = Color.yellow;
 
@@ -68,7 +73,8 @@ public class Influence : MonoBehaviour
            }
             aux[i].resourceCost = newValue;
 
-            aux[i].prefab.GetComponent<Renderer>().material.color = Color.yellow;
+            aux[i].prefab.GetComponent<Renderer>().material.color = Color.Lerp( Color.yellow, Color.white, 1f /aux[i].resourceCost);
+               
 
             Debug.Log(" nivel " + niveles + " valor " + aux[i].resourceCost);
 
