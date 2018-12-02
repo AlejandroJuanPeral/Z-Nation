@@ -1,4 +1,4 @@
 sceneSetups:
-- path: Assets/Andrea/Scenes/Prueba1.unity
+- path: Assets/Scenes/Axel.unity
   isLoaded: 1
   isActive: 1

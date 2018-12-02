@@ -646,11 +646,15 @@
     <Compile Include="Assets\Andrea\Scripts\EnemyMovement.cs" />
     <Compile Include="Assets\Andrea\Scripts\EnemyStats.cs" />
     <Compile Include="Assets\Andrea\Scripts\Grid.cs" />
+    <Compile Include="Assets\Andrea\Scripts\Influence.cs" />
     <Compile Include="Assets\Andrea\Scripts\Moving.cs" />
     <Compile Include="Assets\Andrea\Scripts\MovingManager.cs" />
     <Compile Include="Assets\Andrea\Scripts\Nodo.cs" />
     <Compile Include="Assets\Andrea\Scripts\Pathfinding.cs" />
+    <Compile Include="Assets\Andrea\Scripts\PlayerMovement.cs" />
     <Compile Include="Assets\Andrea\Scripts\PlayerStats.cs" />
+    <Compile Include="Assets\Andrea\Scripts\ResourceStat.cs" />
+    <Compile Include="Assets\Scripts\GameManager.cs" />
     <Compile Include="Assets\Scripts\HexCell.cs" />
     <Compile Include="Assets\Scripts\HexCoordinates.cs" />
     <Compile Include="Assets\Scripts\HexDirection.cs" />
