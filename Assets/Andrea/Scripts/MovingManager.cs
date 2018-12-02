@@ -57,7 +57,7 @@ public class MovingManager : MonoBehaviour
             Debug.Log("Ya no quedan movimientos ");
             return;
         }
-        PlayerStats.cantidadNodosPorTurno--;
+        //PlayerStats.cantidadNodosPorTurno--;
         movementText.text = "Movement left: " + PlayerStats.cantidadNodosPorTurno;
         //Nos movemos al nodo deseado
 
@@ -67,6 +67,8 @@ public class MovingManager : MonoBehaviour
         selectedNode = grid.NodeFromWorldPoint(node.gameObject.transform.position);
 
         playerMovement.isMoving = true;
+
+        player.GetComponent<Pathfinding>().SetTargetNode(selectedNode.prefab.transform);
         
         
 
