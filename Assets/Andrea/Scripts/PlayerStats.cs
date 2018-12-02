@@ -8,4 +8,6 @@ public class PlayerStats : MonoBehaviour
 
     public static int cantidadNodosPorTurno = 5;
 
+    public static float speed = 10f;
+
 }

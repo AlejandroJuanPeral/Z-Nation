@@ -51,16 +51,24 @@ public class Moving : MonoBehaviour
             return;
         }
 
+
+
         //Comprobaciones para moverse
-        rend.material.color = Color.cyan;
+        Nodo n = grid.NodeFromWorldPoint(this.transform.position);
+
+        if (n.isVisibleEnemy)
+        {
+
+            return;
+        }
+        n.prefab.GetComponent<Renderer>().material.color = Color.cyan;
+        //rend.material.color = Color.cyan;
         movingManager.MoveOn(this);
     }
 
     private void OnMouseExit()
     {
-        Vector3 pos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-
-        Nodo n = grid.NodeFromWorldPoint(pos);
+        Nodo n = grid.NodeFromWorldPoint(this.transform.position);
 
         if (n.isVisibleEnemy)
         {
@@ -77,22 +85,18 @@ public class Moving : MonoBehaviour
         {
             return;
         }
+        Nodo n = grid.NodeFromWorldPoint(this.transform.position);
+
+        if (n.isVisibleEnemy)
+        {
+            return;
+        }
 
         // if (!moving.CanMove)
         // {
         //     return;
         // }
 
-
-        Vector3 pos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-
-        Nodo n = grid.NodeFromWorldPoint(pos);
-        Debug.Log(n.isVisibleEnemy);
-
-        if (n.isVisibleEnemy)
-        {
-            return;
-        }
 
         rend.material.color = unreachable;
 

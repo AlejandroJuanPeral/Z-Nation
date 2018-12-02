@@ -5,11 +5,21 @@ using UnityEngine.UI;
 
 public class MovingManager : MonoBehaviour
 {
+    public GameObject player;
+    private PlayerMovement playerMovement;
+
+
     public static MovingManager instance;
 
     public Text movementText;
 
-    private Moving selectedNode;
+    
+
+    private Nodo selectedNode;
+
+    Grid grid;
+
+
 
     //Crear variables que influyen en el movimiento
 
@@ -25,6 +35,10 @@ public class MovingManager : MonoBehaviour
     void Start()
     {
         movementText.text = "Movement left: " + PlayerStats.cantidadNodosPorTurno;
+
+        playerMovement = player.GetComponent<PlayerMovement>();
+
+        grid = GameObject.Find("GameManager").GetComponent<Grid>();
     }
     private void Awake()
     {
@@ -49,11 +63,25 @@ public class MovingManager : MonoBehaviour
 
         node.gameObject.GetComponent<Renderer>().material.color = Color.cyan;
 
+
+        selectedNode = grid.NodeFromWorldPoint(node.gameObject.transform.position);
+
+        playerMovement.isMoving = true;
+        
+        
+
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+        if (playerMovement.isMoving)
+        {
+            player.gameObject.transform.position =  Vector3.MoveTowards(player.transform.position, selectedNode.prefab.transform.position, PlayerStats.speed * Time.deltaTime);
+            if(player.transform.position == selectedNode.prefab.transform.position)
+            {
+                playerMovement.isMoving = false;
+            }
+        }
     }
 }
