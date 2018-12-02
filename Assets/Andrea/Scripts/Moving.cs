@@ -56,22 +56,23 @@ public class Moving : MonoBehaviour
         //Comprobaciones para moverse
         Nodo n = grid.NodeFromWorldPoint(this.transform.position);
 
-        if (n.isVisibleEnemy)
+        if (n.isVisiblePlayer)
         {
-
+            n.prefab.GetComponent<Renderer>().material.color = Color.cyan;
+            //rend.material.color = Color.cyan;
+            movingManager.MoveOn(this);
             return;
         }
-        n.prefab.GetComponent<Renderer>().material.color = Color.cyan;
-        //rend.material.color = Color.cyan;
-        movingManager.MoveOn(this);
+        
     }
 
     private void OnMouseExit()
     {
         Nodo n = grid.NodeFromWorldPoint(this.transform.position);
 
-        if (n.isVisibleEnemy)
+        if (n.isVisiblePlayer)
         {
+            rend.material.color = Color.gray;
             return;
         }
         //rend.material.color = Color.blue;
@@ -87,18 +88,11 @@ public class Moving : MonoBehaviour
         }
         Nodo n = grid.NodeFromWorldPoint(this.transform.position);
 
-        if (n.isVisibleEnemy)
+        if (n.isVisiblePlayer)
         {
+            rend.material.color = unreachable;
             return;
         }
-
-        // if (!moving.CanMove)
-        // {
-        //     return;
-        // }
-
-
-        rend.material.color = unreachable;
 
 
     }
