@@ -36,6 +36,7 @@ public class PlayerMovement : MonoBehaviour
         {
             n.prefab.GetComponent<Renderer>().material.color = Color.grey;
             n.isVisiblePlayer = true;
+            n.prefab.GetComponent<Renderer>().enabled = true;
             
         }
         allVisible.Clear();

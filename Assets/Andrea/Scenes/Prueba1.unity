@@ -201,7 +201,7 @@ PrefabInstance:
     - target: {fileID: 8924326019684536946, guid: 15470ee81e08bfd4284b92bfab5a78bb,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 28.8
+      value: 28
       objectReference: {fileID: 0}
     - target: {fileID: 8924326019684536946, guid: 15470ee81e08bfd4284b92bfab5a78bb,
         type: 3}
@@ -491,7 +491,7 @@ MonoBehaviour:
   unwalkableMask:
     serializedVersion: 2
     m_Bits: 1024
-  gridWorldSize: {x: 100, y: 100}
+  gridWorldSize: {x: 200, y: 200}
   nodeRadius: 1
   path: []
 --- !u!4 &632007061
@@ -2491,6 +2491,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Recurso Material
+      objectReference: {fileID: 0}
+    - target: {fileID: 1865587098217913439, guid: 15470ee81e08bfd4284b92bfab5a78bb,
+        type: 3}
+      propertyPath: m_TagString
+      value: Food
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 15470ee81e08bfd4284b92bfab5a78bb, type: 3}

@@ -61,6 +61,8 @@ public class Grid : MonoBehaviour
                 {
                     renderNodePrefab.material.color = colorNormal;
                 }
+
+                renderNodePrefab.enabled = false;
             }
         }
     }
