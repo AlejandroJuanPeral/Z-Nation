@@ -76,7 +76,7 @@ public class EnemyMovement : MonoBehaviour
         {
             n.prefab.GetComponent<Renderer>().material.color = Color.grey;
             n.isVisibleEnemy = true;
-            Debug.Log("es " + n.isVisibleEnemy);
+            //Debug.Log("es " + n.isVisibleEnemy);
             n.prefab.GetComponent<Renderer>().enabled = true;
         }
     } 

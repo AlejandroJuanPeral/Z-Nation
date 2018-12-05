@@ -7,6 +7,10 @@ public class EnemyStats : MonoBehaviour
 
     public static int cantidadMovimientos = 5;
 
+    public static int movimientoExplorer = 8;
+
+    public static float speed = 10f; 
+
     // Start is called before the first frame update
     void Start()
     {
