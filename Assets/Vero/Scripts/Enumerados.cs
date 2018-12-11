@@ -10,11 +10,4 @@ public class Enumerados : MonoBehaviour
         Alimento,
         Materiales
     };
-
-    public enum Position
-    {
-        Ciudad,
-        CasillaVacia,
-        CasillaRecurso
-    };
 }
