@@ -8,6 +8,7 @@ public class Influence : MonoBehaviour
 
     public int maxLevelSearch;
 
+
     Grid grid;
     Nodo actual;
 
@@ -79,6 +80,18 @@ public class Influence : MonoBehaviour
             Debug.Log(" nivel " + niveles + " valor " + aux[i].resourceCost);
 
         }
+    }
+
+    public void DestroyThis()
+    {
+        List<Nodo> aux = grid.GetNeighboursInLevel(actual, maxLevelSearch);
+
+        for (int i = 0; i < aux.Count; i++)
+        {
+            aux[i].resourceCost = -1;
+            aux[i].prefab.GetComponent<Renderer>().material.color = Color.black;
+        }
+        Destroy(this.gameObject,0.5f);
     }
 
     // Update is called once per frame
