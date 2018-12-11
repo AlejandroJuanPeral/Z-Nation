@@ -4,22 +4,24 @@ using UnityEngine;
 
 public class EnemyStats : MonoBehaviour
 {
+    //PARA CADA GRUPO
+
 
     public static int cantidadMovimientos = 5;
 
     public static int movimientoExplorer = 8;
 
+    public static int numComponentesGrupo = 1;
+
     public static float speed = 10f; 
 
-    // Start is called before the first frame update
-    void Start()
+    public Enumerados.Priorities Prioridad { get; set; }
+
+    public EnemyStats(Enumerados.Priorities priori)
     {
-        
+        Prioridad = priori;
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    
+
 }
