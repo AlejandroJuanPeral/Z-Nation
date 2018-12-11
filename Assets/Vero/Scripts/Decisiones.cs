@@ -4,24 +4,32 @@ using UnityEngine;
 
 public class Decisiones : MonoBehaviour
 {
-    public int alimento; // Alimento suficiente = Nº Unidades x2
-    public int materiales;
+    public int alimento = EnemyValues.alimentos; // Alimento suficiente = Nº Unidades x2
+    public int materiales = EnemyValues.materiales;
 
-    public int barracones;
-    public List<Unidad> unidades = new List<Unidad>();
-    public List<Grupo> grupo = new List<Grupo>();
+    public int barracones = EnemyValues.cantBarracones;
+    public int unidadesTotales = EnemyValues.numTotalUnidades;
+    public int unidadesDentroCiudad = EnemyValues.numUnidadesCiudad;
+    public List<GameObject> grupos = EnemyValues.totalGroups;
+    public int nivel;
 
     public int coste_Barracon;
-    public int coste_Unidad;
-    public int coste_MantenimientoUnidad;
+    public int coste_Unidad = 10;//alimento
+    public int coste_MantenimientoUnidad = 1;//alimento
 
-    public Decisiones(int alimento, int materiales, int barracones, List<Unidad> unidades, List<Grupo> grupos, int coste_Barracon, int coste_Unidad, int coste_MantenimientoUnidad)
+    private void Start()
+    {
+        coste_Barracon = CosteBarracon();
+    }
+
+    public Decisiones(int alimento, int materiales, int barracones, int unidades, List<GameObject> grupos, int nivel, int coste_Barracon, int coste_Unidad, int coste_MantenimientoUnidad)
     {
         this.alimento = alimento;
         this.materiales = materiales;
         this.barracones = barracones;
-        this.unidades = unidades;
-        this.grupo = grupos;
+        unidadesTotales = unidades;
+        this.grupos = grupos;
+        this.nivel = nivel;
         this.coste_Barracon = coste_Barracon;
         this.coste_Unidad = coste_Unidad;
         this.coste_MantenimientoUnidad = coste_MantenimientoUnidad;
@@ -59,12 +67,12 @@ public class Decisiones : MonoBehaviour
         }
 
 
-        if (CiudadPoblada(unidades))
+        if (unidadesDentroCiudad > 10)
         {
             int random = Random.Range(0, 3);
             if (random == 2)
             {
-                int resto = unidades.Count % 10;
+                int resto = unidades % 10;
                 if (resto > 1)//Porque quiero que se queden al menos 2 unidades en la ciudad
                 {
                     //Enviar (unidades.Count/10) grupos de 10 unidades a atacar la ciudad enemiga
@@ -75,9 +83,9 @@ public class Decisiones : MonoBehaviour
 
         if (UnidadesFueraCiudad(grupos))
         {
-            foreach (Grupo grupo in grupos)
+            foreach (GameObject grupo in grupos)
             {
-                Grupo grupoEnemigo = EnemigoCerca(grupo);
+                GameObject grupoEnemigo = EnemigoCerca(grupo);
                 if (grupoEnemigo)
                 {
                     if (EnemigoFuerte(grupo, grupoEnemigo))
@@ -104,9 +112,9 @@ public class Decisiones : MonoBehaviour
    
 
 
-    public bool AlimentoSuficienteParaMantener(int alimento, List<Unidad> unidades)
+    public bool AlimentoSuficienteParaMantener(int alimento, int unidades)
     {
-        return alimento > unidades.Count * 2;
+        return alimento > unidades * 2;
     }
 
     public bool MaterialSuficiente(int materiales)
@@ -114,87 +122,69 @@ public class Decisiones : MonoBehaviour
         return materiales >= coste_Barracon;
     }
 
-    public bool BarraconesLibres(int barracones, List<Unidad> unidades)
+    public bool BarraconesLibres(int barracones, int unidades)
     {
-        return barracones > unidades.Count;
+        return barracones > unidades;
     }
 
-    public bool AlimentoSuficienteParaCrear(int alimento, List<Unidad> unidades)
+    public bool AlimentoSuficienteParaCrear(int alimento, int unidades)
     {
-        return alimento > (unidades.Count * 2) + coste_Unidad;
+        return alimento > (unidades * 2) + coste_Unidad;
     }
 
-    public Grupo GruposFueraSinPrioridad(List<Grupo> grupos)
+    public GameObject GruposFueraSinPrioridad(List<GameObject> grupos)
     {
-        foreach (Grupo grupo in grupos)
+        foreach (GameObject grupo in grupos)
         {
-            if (grupo.prioridad == Enumerados.Priorities.None) return grupo;
+            if (grupo.GetComponent<EnemyStats>().Prioridad == Enumerados.Priorities.None) return grupo;
         }
 
         return null;
     }
 
-    public void ProcesarGrupoParado(List<Grupo> grupo, Enumerados.Priorities prioridad)
+    public void ProcesarGrupoParado(List<GameObject> grupo, Enumerados.Priorities prioridad)
     {
-        Grupo grupoParado = GruposFueraSinPrioridad(grupo);
+        GameObject grupoParado = GruposFueraSinPrioridad(grupo);
         if (grupoParado)
         {
-            grupoParado.prioridad = prioridad;
+            grupoParado.GetComponent<EnemyStats>().Prioridad = prioridad;
             //Llamar a la función BUSCAR X/Y
         }
         else
         {
-            if (UnidadesDentroCiudad(unidades))
+            if (unidadesDentroCiudad > 0)
             {
-                //Llamar a la función CREAR GRUPO DE UNIDADES
+                //Llamar a la función CREAR GRUPO DE UNIDADES (numComponentesGrupo = nº unidades en el grupo)
                 //Creará grupos de tamaño random entre 1 y (máx unidades en la ciudad && máx unidades por grupo)
                 //Se le asignará una prioridad y llamará a la función BUSCAR X/Y.
             }
         }
     }
 
-    public bool UnidadesDentroCiudad(List<Unidad> unidades)
-    {
-        foreach (Unidad unidad in unidades)
-        {
-            if (unidad.posicion == Enumerados.Position.Ciudad) return true;
-        }
 
-        return false;
-    }
-    
-    public bool CiudadPoblada(List<Unidad> unidades)
-    {
-        int poblada = 0;
-        foreach (Unidad unidad in unidades)
-        {
-            if (unidad.posicion == Enumerados.Position.Ciudad)
-            {
-                poblada++;
-            }
-        }
-
-        return poblada >= 10;
-    }
-
-    public bool UnidadesFueraCiudad(List<Grupo> grupos)
+    public bool UnidadesFueraCiudad(List<GameObject> grupos)
     {
         return grupos.Count > 0;
     }
 
-    public bool GrupoConPrioridad(Grupo grupo)
+    public bool GrupoConPrioridad(GameObject grupo)
     {
-        return grupo.prioridad != Enumerados.Priorities.None;
+        return grupo.GetComponent<EnemyStats>().Prioridad != Enumerados.Priorities.None;
     }
 
-    public Grupo EnemigoCerca(Grupo grupo)
+    public GameObject EnemigoCerca(GameObject grupo)
     {
         return null; //Hay enemigos visibles? Estan a distancia atacable?
     }
 
-    public bool EnemigoFuerte(Grupo grupo, Grupo grupoEnemigo)
+    public bool EnemigoFuerte(GameObject grupo, GameObject grupoEnemigo)
     {
-        return grupo.Group.Count < grupoEnemigo.Group.Count;
+        return grupo.GetComponent<EnemyStats>().numComponentesGrupo < grupoEnemigo.GetComponent<PlayerStats>().numComponentesGrupo;
+    }
+
+    public int CosteBarracon()
+    {
+        return (int) ((nivel * 30) * 0.5f + 30);
     }
 
 }
