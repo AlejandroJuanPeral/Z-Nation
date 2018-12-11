@@ -10,6 +10,6 @@ public class PlayerStats : MonoBehaviour
 
     public static float speed = 10f;
 
-    public static int numComponentesGrupo = 1;
+    public int numComponentesGrupo = 1;
 
 }

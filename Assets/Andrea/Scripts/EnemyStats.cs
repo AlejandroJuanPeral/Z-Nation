@@ -11,7 +11,7 @@ public class EnemyStats : MonoBehaviour
 
     public static int movimientoExplorer = 8;
 
-    public static int numComponentesGrupo = 1;
+    public int numComponentesGrupo = 1;
 
     public static float speed = 10f; 
 
