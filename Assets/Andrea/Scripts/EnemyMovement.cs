@@ -10,6 +10,8 @@ public class EnemyMovement : MonoBehaviour
     public Color colorReachable;
     public Color pathColor;
 
+    public bool move;
+
     Grid grid;
 
     List<Nodo> vecinos;
@@ -41,7 +43,9 @@ public class EnemyMovement : MonoBehaviour
 
         //aux = VisitingNeighbours(actual);
 
-        //EnemyVisibility();
+        EnemyVisibility();
+
+       
 
         
     }
@@ -52,7 +56,7 @@ public class EnemyMovement : MonoBehaviour
         if(allVisible.Count > 0)
         {
             //Reiniciamos
-            Debug.Log("Hay que reiniciar los visible");
+            //Debug.Log("Hay que reiniciar los visible");
             ResetAllVisibles();
         }
         
@@ -66,6 +70,64 @@ public class EnemyMovement : MonoBehaviour
 
         cola.Clear();
         
+        
+    }
+
+    Nodo DecisionMovement()
+    {
+        Nodo maxValue = allVisible[0];
+        foreach(Nodo n in allVisible)
+        {
+            if(n.resourceCost != -1)
+            {
+                if(n.resourceCost > maxValue.resourceCost)
+                {
+                    maxValue = n;
+                }
+            }
+        }
+        if(maxValue == allVisible[0] && EnemyExplorerMovement.nodosForVisiting.Count>0)
+        {
+            //Encontramos el nodo más cercano de los que ha visto el explorador y ese será
+            maxValue = GetNodoExplorerCercano();
+        }
+        return maxValue;
+
+    }
+
+    Nodo GetNodoExplorerCercano()
+    {
+        
+        List<Nodo> aux = EnemyExplorerMovement.nodosForVisiting;
+        Nodo cercano = aux[0];
+        foreach (Nodo n in aux)
+        {
+            if(aux.Count == 1)
+            {
+                return cercano;
+            }
+            else
+            {
+                if(actual.GetDistance(n) < actual.GetDistance(cercano))
+                {
+                    cercano = n;
+                }
+            }
+        }
+
+        return cercano;
+    }
+
+    void MoveTo(Nodo n)
+    {
+        this.gameObject.transform.position = Vector3.MoveTowards(this.gameObject.transform.position, n.worldPosition, EnemyStats.speed * Time.deltaTime);
+        if(this.gameObject.transform.position == n.worldPosition)
+        {
+            if (n.objectInNode)
+            {
+                n.objectInNode.GetComponent<Influence>().DestroyThis();
+            }
+        }
         
     }
 
@@ -111,9 +173,14 @@ public class EnemyMovement : MonoBehaviour
     {
 
         //VisitingNeighbours(actual);
-        EnemyVisibility();
+        //EnemyVisibility();
+        if (move)
+        {
+            MoveTo(DecisionMovement());
 
-        
-        
+        }
+
+
+
     }
 }

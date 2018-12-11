@@ -68,7 +68,7 @@ public class MovingManager : MonoBehaviour
 
         playerMovement.isMoving = true;
 
-        player.GetComponent<Pathfinding>().SetTargetNode(selectedNode.prefab.transform);
+  
         
         
 

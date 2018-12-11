@@ -9,6 +9,15 @@ public class EnemyExplorerMovement : MonoBehaviour
     public Color colorReachable;
     public Color pathColor;
 
+    
+
+    public bool move;
+
+    public List<Transform> positions = new List<Transform>();
+
+ 
+    public static List<Nodo> nodosForVisiting = new List<Nodo>();
+
     Grid grid;
 
     List<Nodo> vecinos;
@@ -21,26 +30,27 @@ public class EnemyExplorerMovement : MonoBehaviour
 
     Queue<Nodo> cola;
 
-    int index;
+    int index = 0;
 
     //Nodos a visitar
 
-    public List<Transform> positions = new List<Transform>();
+    
     bool arrive = false;
     bool finished = false;
 
-    private Pathfinding pathFinding;
-    private List<Nodo> path;
-    Queue<Nodo> colaPath;
+
+
 
     bool reachDestination;
+
+    Transform actualPosition;
 
     // Start is called before the first frame update
     void Start()
     {
         grid = GameObject.Find("GameManager").GetComponent<Grid>();
         allVisible = new List<Nodo>();
-        index = 0;
+       
 
         actual = grid.NodeFromWorldPoint(transform.position);
         vecinos = grid.GetNeighbours(actual);
@@ -50,39 +60,10 @@ public class EnemyExplorerMovement : MonoBehaviour
 
         cola = new Queue<Nodo>();
 
-
-
-        //aux = VisitingNeighbours(actual);
-
-        //EnemyVisibility();
-
-        pathFinding = this.gameObject.GetComponent<Pathfinding>();
-
-        pathFinding.target = positions[0];
-
-       
-        colaPath = new Queue<Nodo>();
-
-      
+        NextPosition();
 
 
     }
-
-    void PathFollowingTo()
-    {
-        path = pathFinding.pathPublic;
-
-        colaPath.Clear();
-        reachDestination = false;
-
-        foreach (Nodo n in path)
-        {
-            colaPath.Enqueue(n);
-        }
-    }
-
-
-
 
 
     void EnemyVisibility()
@@ -91,7 +72,7 @@ public class EnemyExplorerMovement : MonoBehaviour
         if (allVisible.Count > 0)
         {
             //Reiniciamos
-            Debug.Log("Hay que reiniciar los visible");
+            //Debug.Log("Hay que reiniciar los visible");
             ResetAllVisibles();
         }
 
@@ -106,6 +87,13 @@ public class EnemyExplorerMovement : MonoBehaviour
         cola.Clear();
 
 
+    }
+
+    void NextPosition()
+    {
+        finished = false;
+        
+        actualPosition = positions[index];
     }
 
     void ResetAllVisibles()
@@ -138,6 +126,14 @@ public class EnemyExplorerMovement : MonoBehaviour
                 allVisible.Add(aux[i]);
                 aux[i].isVisibleEnemy = true;
                 cola.Enqueue(aux[i]);
+                if(aux[i].objectInNode != null)
+                {
+                    if (!nodosForVisiting.Contains(aux[i]))
+                    {
+                        nodosForVisiting.Add(aux[i]);
+
+                    }
+                }
 
             }
         }
@@ -148,11 +144,15 @@ public class EnemyExplorerMovement : MonoBehaviour
     void MovementExplorer()
     {
 
-       this.gameObject.transform.position = Vector3.MoveTowards(this.gameObject.transform.position, positions[0].position, EnemyStats.speed * Time.deltaTime);
-       if(this.gameObject.transform.position == positions[0].position)
+       this.gameObject.transform.position = Vector3.MoveTowards(this.gameObject.transform.position, actualPosition.position, EnemyStats.speed * Time.deltaTime);
+       if(this.gameObject.transform.position == actualPosition.position)
        {
-             positions.Remove(positions[0]);
+            
             finished = true;
+            index += 1;
+            NextPosition();
+            //Debug.Log("index : " + index);
+            
 
         }
       
@@ -166,10 +166,13 @@ public class EnemyExplorerMovement : MonoBehaviour
         //VisitingNeighbours(actual);
         EnemyVisibility();
 
-        if(finished == false)
-        {
-            MovementExplorer();
+        if(move == true) {
+            if (finished == false) //Comprobar si tiene movimientos restantes
+            {
+                MovementExplorer();
+            }
         }
+        
 
        
 
