@@ -5,28 +5,32 @@ using UnityEngine.UI;
 
 public class BottonScript : MonoBehaviour
 {
-    public Slider slider;
     public GameObject Manager;
-    public void OpenMerge(GameObject Group1, GameObject Group2)
+    public InputField Input;
+ 
+    public void Merge(Slider slider, GameObject Group1, GameObject Group2)
     {
+        Group1.GetComponent< PlayerStats > ().numComponentesGrupo = slider.value;
+        Group2.GetComponent<PlayerStats>().numComponentesGrupo = slider.maxValue - slider.value;
 
     }
-    public void Merge(Slider slider)
+    public void SeparatePanel()
     {
+        Manager.GetComponent<PlayerManager>().Separate();
 
     }
-    public void Separate(GameObject Group1)
+    public void Separate(Slider slider)
     {
+        Manager.GetComponent<PlayerManager>().SeparateNewGroup(slider.maxValue - slider.value);
 
     }
-    public void newGroup(InputField input)
-    {
-        
-    }
-    public void CreateUniy(Transform pos)
+    public void newGroup()
     {
 
-    } 
+        //Manager.GetComponent<PlayerManager>().NewGroup((int)Input.text);
+
+    }
+
     public void EndTurn()
     {
         Manager.GetComponent<PlayerManager>().FinishTurn();

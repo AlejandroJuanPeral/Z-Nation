@@ -5,11 +5,12 @@ using UnityEngine.UI;
 
 public class PlayerManager : MonoBehaviour
 {
-    public GameObject FinishButton, CityPanel, RecoursesPanel, MergePanel, UnitPanel;
+    public GameObject FinishButton, CityPanel, RecoursesPanel, MergePanel, UnitPanel, SeparatePanel;
     public Text UnitMovement, BarraconText, UnitText, RecourseText;
-    public int Food, ConRecourse, Units, MaxUnits, LevelBarracon,aux;
+    public Slider SepSlider;
+    public int Food, ConRecourse, Units, MaxUnits, UnitsInCity, LevelBarracon,aux;
     public List<GameObject> Groups = new List<GameObject>();
-
+    public GameObject GrupPrefab;
     // Start is called before the first frame update
     void Start()
     {
@@ -88,5 +89,29 @@ public class PlayerManager : MonoBehaviour
             RecourseText.text = "Alimento: " + Food.ToString("0000") + " Rec.Construcción: " + ConRecourse.ToString("0000") + "/n Unidades: " + Units + " / " + MaxUnits;
         }
 
+    }
+    public void NewGroup(int num)
+    {
+        if (num <= UnitsInCity)
+        {
+            //GameObject Group = Instantiate(GrupPrefab,,);
+            //Group.GetComponent<PlayerStats>().numComponentesGrupo = num;
+            UnitsInCity -= num;
+        }
+    }
+    public void Separate()
+    {
+        SeparatePanel.SetActive(true);
+        SepSlider.maxValue = Groups[aux].GetComponent<PlayerStats>().numComponentesGrupo - 1;
+        SepSlider.value = Groups[aux].GetComponent<PlayerStats>().numComponentesGrupo - 1;
+    }
+    public void SeparateNewGroup(int num)
+    {
+        if (num < Groups[aux].GetComponent<PlayerStats>().numComponentesGrupo)
+        {
+            //GameObject Group = Instantiate(GrupPrefab,,);
+            //Group.GetComponent<PlayerStats>().numComponentesGrupo = num;
+            Groups[aux].GetComponent<PlayerStats>().numComponentesGrupo -= num;
+        }
     }
 }
