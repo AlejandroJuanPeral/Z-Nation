@@ -26,6 +26,8 @@ public class EnemyMovement : MonoBehaviour
 
     int index;
 
+    int cantNodos = EnemyStats.cantidadMovimientos;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -120,15 +122,37 @@ public class EnemyMovement : MonoBehaviour
 
     void MoveTo(Nodo n)
     {
+        Nodo anteriorAux = grid.NodeFromWorldPoint(transform.position);
+
         this.gameObject.transform.position = Vector3.MoveTowards(this.gameObject.transform.position, n.worldPosition, EnemyStats.speed * Time.deltaTime);
-        if(this.gameObject.transform.position == n.worldPosition)
+
+        Nodo actualAux = grid.NodeFromWorldPoint(transform.position);
+
+        if(actualAux != anteriorAux)
+        {
+            cantNodos--;
+            if(cantNodos == 0)
+            {
+                move = false;
+                Debug.Log("Se ha terminado el turno ");
+            }
+        }
+
+        if (this.gameObject.transform.position == n.worldPosition)
         {
             if (n.objectInNode)
             {
                 n.objectInNode.GetComponent<Influence>().DestroyThis();
             }
         }
-        
+        EnemyVisibility();
+
+
+    }
+    //Para que sea un nuevo turno se llama a esta función y se pone a true el bool move
+    void NewTurn()
+    {
+        cantNodos = EnemyStats.cantidadMovimientos;
     }
 
     void ResetAllVisibles()

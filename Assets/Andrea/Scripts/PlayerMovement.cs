@@ -15,6 +15,8 @@ public class PlayerMovement : MonoBehaviour
 
 
     public bool isMoving = false;
+
+    public int cantNodos = PlayerStats.cantidadNodosPorTurno;
     
 
     // Start is called before the first frame update
@@ -64,6 +66,11 @@ public class PlayerMovement : MonoBehaviour
         return aux;
     }
 
+    public void NextTurn()
+    {
+        cantNodos = PlayerStats.cantidadNodosPorTurno;
+    }
+
     void PlayerVisibility()
     {
         if(allVisible.Count> 0)
@@ -76,10 +83,39 @@ public class PlayerMovement : MonoBehaviour
         VisitingNeighbours(actual);
     }
 
+    public void MoveTo(Nodo n)
+    {
+        Nodo anteriorAux = grid.NodeFromWorldPoint(transform.position);
+
+        this.gameObject.transform.position = Vector3.MoveTowards(this.gameObject.transform.position, n.worldPosition, EnemyStats.speed * Time.deltaTime);
+
+        Nodo actualAux = grid.NodeFromWorldPoint(transform.position);
+
+        if (actualAux != anteriorAux)
+        {
+            cantNodos--;
+            if (cantNodos == 0)
+            {
+                isMoving = false;
+                Debug.Log("Se ha terminado el turno ");
+            }
+        }
+
+        if (this.gameObject.transform.position == n.worldPosition)
+        {
+            if (n.objectInNode)
+            {
+                n.objectInNode.GetComponent<Influence>().DestroyThis();
+            }
+        }
+        PlayerVisibility();
+
+
+    }
+
     // Update is called once per frame
     void Update()
     {
         PlayerVisibility();
-
     }
 }

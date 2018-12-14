@@ -45,6 +45,8 @@ public class EnemyExplorerMovement : MonoBehaviour
 
     Transform actualPosition;
 
+    int cantNodos = EnemyStats.movimientoExplorer;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -140,12 +142,33 @@ public class EnemyExplorerMovement : MonoBehaviour
 
         return aux;
     }
+    //Para que sea un nuevo turno se llama a esta función y se pone a true el bool move
+    void NewTurn()
+    {
+        cantNodos = EnemyStats.movimientoExplorer;
+    }
 
     void MovementExplorer()
     {
+        Nodo anteriorAux = grid.NodeFromWorldPoint(transform.position);
 
-       this.gameObject.transform.position = Vector3.MoveTowards(this.gameObject.transform.position, actualPosition.position, EnemyStats.speed * Time.deltaTime);
-       if(this.gameObject.transform.position == actualPosition.position)
+
+        this.gameObject.transform.position = Vector3.MoveTowards(this.gameObject.transform.position, actualPosition.position, EnemyStats.speed * Time.deltaTime);
+
+
+        Nodo actualAux = grid.NodeFromWorldPoint(transform.position);
+
+        if (actualAux != anteriorAux)
+        {
+            cantNodos--;
+            if (cantNodos == 0)
+            {
+                move = false;
+                Debug.Log("Se ha terminado el turno ");
+            }
+        }
+
+        if (this.gameObject.transform.position == actualPosition.position)
        {
             
             finished = true;

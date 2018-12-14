@@ -10,8 +10,8 @@ public class BottonScript : MonoBehaviour
  
     public void Merge(Slider slider, GameObject Group1, GameObject Group2)
     {
-        Group1.GetComponent< PlayerStats > ().numComponentesGrupo = slider.value;
-        Group2.GetComponent<PlayerStats>().numComponentesGrupo = slider.maxValue - slider.value;
+        Group1.GetComponent<PlayerStats> ().numComponentesGrupo =(int) slider.value;
+        Group2.GetComponent<PlayerStats>().numComponentesGrupo = (int) slider.maxValue - (int) slider.value;
 
     }
     public void SeparatePanel()
@@ -21,7 +21,7 @@ public class BottonScript : MonoBehaviour
     }
     public void Separate(Slider slider)
     {
-        Manager.GetComponent<PlayerManager>().SeparateNewGroup(slider.maxValue - slider.value);
+        //Manager.GetComponent<PlayerManager>().SeparateNewGroup(slider.maxValue - slider.value);
 
     }
     public void newGroup()
