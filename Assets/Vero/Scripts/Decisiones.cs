@@ -6,30 +6,33 @@ public class Decisiones : MonoBehaviour
 {
     public int alimento = EnemyValues.alimentos; // Alimento suficiente = Nº Unidades x2
     public int materiales = EnemyValues.materiales;
+    public GameObject ciudadEnemiga;
+    public Grid grid;
 
     public int barracones = EnemyValues.cantBarracones;
     public int unidadesTotales = EnemyValues.numTotalUnidades;
     public int unidadesDentroCiudad = EnemyValues.numUnidadesCiudad;
     public List<GameObject> grupos = EnemyValues.totalGroups;
-    public int nivel;
 
     public int coste_Barracon;
     public int coste_Unidad = 10;//alimento
     public int coste_MantenimientoUnidad = 1;//alimento
 
+    public GameObject groupPrefab;
+
     private void Start()
     {
         coste_Barracon = CosteBarracon();
+        grid = GameObject.Find("GameManager").GetComponent<Grid>();
     }
 
-    public Decisiones(int alimento, int materiales, int barracones, int unidades, List<GameObject> grupos, int nivel, int coste_Barracon, int coste_Unidad, int coste_MantenimientoUnidad)
+    public Decisiones(int alimento, int materiales, int barracones, int unidades, List<GameObject> grupos, int coste_Barracon, int coste_Unidad, int coste_MantenimientoUnidad)
     {
         this.alimento = alimento;
         this.materiales = materiales;
         this.barracones = barracones;
         unidadesTotales = unidades;
         this.grupos = grupos;
-        this.nivel = nivel;
         this.coste_Barracon = coste_Barracon;
         this.coste_Unidad = coste_Unidad;
         this.coste_MantenimientoUnidad = coste_MantenimientoUnidad;
@@ -42,7 +45,7 @@ public class Decisiones : MonoBehaviour
             {
                 if (AlimentoSuficienteParaCrear(alimento, unidades))
                 {
-                    //Llamada a la función CREAR UNIDAD.
+                    NuevaUnidad();
                 }
                 else //No tiene alimento suficiente para mantener las unidades + crear nuevas
                 {
@@ -53,7 +56,7 @@ public class Decisiones : MonoBehaviour
             {
                 if (MaterialSuficiente(materiales))
                 {
-                    //Llamada a la función CREAR BARRACÓN
+                    NuevoBarracon();
                 }
                 else //No tiene materiales suficiente para construir
                 {
@@ -73,9 +76,14 @@ public class Decisiones : MonoBehaviour
             if (random == 2)
             {
                 int resto = unidades % 10;
+                int numGrupos = unidades / 10;
                 if (resto > 1)//Porque quiero que se queden al menos 2 unidades en la ciudad
                 {
-                    //Enviar (unidades.Count/10) grupos de 10 unidades a atacar la ciudad enemiga
+                    for (int i = 0; i < numGrupos; i++)
+                    {
+                        GrupoAtaque(); //Enviar (unidades.Count/10) grupos de 10 unidades a atacar la ciudad enemiga
+                    }
+                   
                 }
             }
         }
@@ -88,20 +96,9 @@ public class Decisiones : MonoBehaviour
                 GameObject grupoEnemigo = EnemigoCerca(grupo);
                 if (grupoEnemigo)
                 {
-                    if (EnemigoFuerte(grupo, grupoEnemigo))
+                    if (!EnemigoFuerte(grupo, grupoEnemigo))
                     {
-                        if (GrupoConPrioridad(grupo))
-                        {
-                            //Llamar a la función HUYE COBARDE VILLANO O TE DEJARÉ LA MARCA DE LOS DEDOS DE MI MANO
-                        }
-                        else
-                        {
-                            //Llamar a la función VUELVE A LA CIUDAD
-                        }
-                    }
-                    else
-                    {
-                        //Llamar a la función AL ATAQUEEE
+                        //Hay que atacar, vale?----------------------------------------------------------------------------------------------------------------------------------------------------------
                     }
                 }
             }          
@@ -110,7 +107,6 @@ public class Decisiones : MonoBehaviour
 
     }
    
-
 
     public bool AlimentoSuficienteParaMantener(int alimento, int unidades)
     {
@@ -124,7 +120,7 @@ public class Decisiones : MonoBehaviour
 
     public bool BarraconesLibres(int barracones, int unidades)
     {
-        return barracones > unidades;
+        return barracones > unidades/2;
     }
 
     public bool AlimentoSuficienteParaCrear(int alimento, int unidades)
@@ -147,20 +143,27 @@ public class Decisiones : MonoBehaviour
         GameObject grupoParado = GruposFueraSinPrioridad(grupo);
         if (grupoParado)
         {
-            grupoParado.GetComponent<EnemyStats>().Prioridad = prioridad;
-            //Llamar a la función BUSCAR X/Y
+            grupoParado.GetComponent<EnemyStats>().Prioridad = prioridad; //Llamar a la función BUSCAR X/Y
         }
         else
         {
-            if (unidadesDentroCiudad > 0)
+            if (unidadesDentroCiudad > 1)
             {
-                //Llamar a la función CREAR GRUPO DE UNIDADES (numComponentesGrupo = nº unidades en el grupo)
-                //Creará grupos de tamaño random entre 1 y (máx unidades en la ciudad && máx unidades por grupo)
-                //Se le asignará una prioridad y llamará a la función BUSCAR X/Y.
+                int rdn;
+                if (unidadesDentroCiudad > 9)
+                {
+                    rdn = Random.Range(1, 10);
+                }
+                else
+                {
+                    rdn = Random.Range(1, unidadesDentroCiudad - 1);
+                }
+
+                NuevoGrupo(rdn, prioridad);    //Llamar a la función CREAR GRUPO DE UNIDADES (numComponentesGrupo = nº unidades en el grupo)
+                                            //Se le asignará una prioridad y llamará a la función BUSCAR X/Y.
             }
         }
     }
-
 
     public bool UnidadesFueraCiudad(List<GameObject> grupos)
     {
@@ -174,6 +177,14 @@ public class Decisiones : MonoBehaviour
 
     public GameObject EnemigoCerca(GameObject grupo)
     {
+        List<Nodo> aux = grupo.GetComponent<EnemyMovement>().allVisible;
+        foreach(Nodo n in aux)
+        {
+            if(n.objectInNode.tag == "Player")
+            {
+                return n.objectInNode;
+            }
+        }
         return null; //Hay enemigos visibles? Estan a distancia atacable?
     }
 
@@ -184,7 +195,37 @@ public class Decisiones : MonoBehaviour
 
     public int CosteBarracon()
     {
-        return (int) ((nivel * 30) * 0.5f + 30);
+        return (int) ((barracones * 30) * 0.5f + 30);
+    }
+
+    public void NuevoBarracon()
+    {
+        materiales -= coste_Barracon;
+        barracones++;
+    }
+
+    public void NuevaUnidad()
+    {
+        unidadesDentroCiudad++;
+        alimento -= 10;
+    }
+
+    public void NuevoGrupo(int num, Enumerados.Priorities prioridad)
+    {
+        GameObject Group = Instantiate(groupPrefab,this.transform.position, Quaternion.identity);
+        Group.GetComponent<EnemyStats>().Prioridad = prioridad;
+        Group.GetComponent<EnemyStats>().numComponentesGrupo = num;
+        unidadesDentroCiudad -= num;
+        grupos.Add(Group);
+    }
+
+    public void GrupoAtaque()
+    {
+        GameObject Group = Instantiate(groupPrefab, this.transform.position, Quaternion.identity);
+        Group.GetComponent<EnemyMovement>().MoveTo(grid.NodeFromWorldPoint(ciudadEnemiga.transform.position));
+        Group.GetComponent<EnemyStats>().numComponentesGrupo = 10;
+        unidadesDentroCiudad -= 10;
+        grupos.Add(Group);
     }
 
 }

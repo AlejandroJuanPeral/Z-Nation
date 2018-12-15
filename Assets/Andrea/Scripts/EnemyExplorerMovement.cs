@@ -16,7 +16,8 @@ public class EnemyExplorerMovement : MonoBehaviour
     public List<Transform> positions = new List<Transform>();
 
  
-    public static List<Nodo> nodosForVisiting = new List<Nodo>();
+    public static List<Nodo> nodosForVisitingFood = new List<Nodo>();
+    public static List<Nodo> nodosForVisitingResources = new List<Nodo>();
 
     Grid grid;
 
@@ -130,11 +131,21 @@ public class EnemyExplorerMovement : MonoBehaviour
                 cola.Enqueue(aux[i]);
                 if(aux[i].objectInNode != null)
                 {
-                    if (!nodosForVisiting.Contains(aux[i]))
+                    if (aux[1].objectInNode.tag == "Food")
                     {
-                        nodosForVisiting.Add(aux[i]);
+                        if (!nodosForVisitingFood.Contains(aux[i]))
+                        {
+                            nodosForVisitingFood.Add(aux[i]);
+                        }
 
+                    } else if (aux[1].objectInNode.tag == "Resources")
+                    {
+                        if (!nodosForVisitingResources.Contains(aux[i]))
+                        {
+                            nodosForVisitingResources.Add(aux[i]);
+                        }
                     }
+                    
                 }
 
             }
