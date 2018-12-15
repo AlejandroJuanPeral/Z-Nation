@@ -131,14 +131,14 @@ public class EnemyExplorerMovement : MonoBehaviour
                 cola.Enqueue(aux[i]);
                 if(aux[i].objectInNode != null)
                 {
-                    if (aux[1].objectInNode.tag == "Food")
+                    if (aux[i].objectInNode.tag == "Food")
                     {
                         if (!nodosForVisitingFood.Contains(aux[i]))
                         {
                             nodosForVisitingFood.Add(aux[i]);
                         }
 
-                    } else if (aux[1].objectInNode.tag == "Resources")
+                    } else if (aux[i].objectInNode.tag == "Resource")
                     {
                         if (!nodosForVisitingResources.Contains(aux[i]))
                         {

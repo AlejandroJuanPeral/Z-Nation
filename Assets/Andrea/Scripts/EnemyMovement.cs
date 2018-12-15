@@ -30,6 +30,8 @@ public class EnemyMovement : MonoBehaviour
 
     public GameObject ciudadPropia;
 
+    private 
+
     // Start is called before the first frame update
     void Start()
     {
@@ -91,7 +93,7 @@ public class EnemyMovement : MonoBehaviour
             }
         }
 
-        if (this.gameObject.GetComponent<EnemyStats>().Prioridad == Enumerados.Priorities.Alimento)
+        if (this.gameObject.GetComponent<EnemyStats>().prioridad == Enumerados.Priorities.Alimento)
         {
             if (maxValue == allVisible[0] && EnemyExplorerMovement.nodosForVisitingFood.Count > 0)
             {
@@ -99,7 +101,7 @@ public class EnemyMovement : MonoBehaviour
             }
             return maxValue;
         }
-        else if (this.gameObject.GetComponent<EnemyStats>().Prioridad == Enumerados.Priorities.Materiales)
+        else if (this.gameObject.GetComponent<EnemyStats>().prioridad == Enumerados.Priorities.Materiales)
         {
             if (maxValue == allVisible[0] && EnemyExplorerMovement.nodosForVisitingResources.Count > 0)
             {
@@ -115,7 +117,6 @@ public class EnemyMovement : MonoBehaviour
 
     } 
         
-
     Nodo GetNodoExplorerCercano( List<Nodo> aux)
     {
 
@@ -156,12 +157,30 @@ public class EnemyMovement : MonoBehaviour
             }
         }
 
-        if (this.gameObject.transform.position == n.worldPosition)
+        if (actualAux == n)
         {
-            if (n.objectInNode)
+            Debug.Log("Llegado al destino");
+            if (n.objectInNode != null)
             {
-                n.objectInNode.GetComponent<Influence>().DestroyThis();
+
+                if (n.objectInNode.tag == "Food" && this.gameObject.GetComponent<EnemyStats>().prioridad == Enumerados.Priorities.Alimento)
+                {
+                    Debug.Log("Alimento ");
+                    EnemyExplorerMovement.nodosForVisitingFood.Remove(n);
+                    n.objectInNode.gameObject.GetComponent<Influence>().DestroyThis();
+                }
+
+                else if(n.objectInNode.tag == "Resource" && this.gameObject.GetComponent<EnemyStats>().prioridad == Enumerados.Priorities.Materiales)
+                {
+                    Debug.Log("resource ");
+
+                    EnemyExplorerMovement.nodosForVisitingResources.Remove(n);
+                    n.objectInNode.gameObject.GetComponent<Influence>().DestroyThis();
+                }
             }
+
+            //HAY QUE HACER UNA FUNCION QUE RESETEE EL NODO AL QUE VA DESPUES DE QUE LLEGUE
+
         }
         EnemyVisibility();
 

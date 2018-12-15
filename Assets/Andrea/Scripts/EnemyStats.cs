@@ -13,13 +13,17 @@ public class EnemyStats : MonoBehaviour
 
     public int numComponentesGrupo = 1;
 
-    public static float speed = 10f; 
+    public static float speed = 10f;
 
-    public Enumerados.Priorities Prioridad { get; set; }
 
+    public Enumerados.Priorities prioridad;
+
+    //public Enumerados.Priorities Prioridad { get; set; }
+
+   
     public EnemyStats(Enumerados.Priorities priori)
     {
-        Prioridad = priori;
+        prioridad = priori;
     }
 
     

@@ -132,7 +132,7 @@ public class Decisiones : MonoBehaviour
     {
         foreach (GameObject grupo in grupos)
         {
-            if (grupo.GetComponent<EnemyStats>().Prioridad == Enumerados.Priorities.None) return grupo;
+            if (grupo.GetComponent<EnemyStats>().prioridad == Enumerados.Priorities.None) return grupo;
         }
 
         return null;
@@ -143,7 +143,7 @@ public class Decisiones : MonoBehaviour
         GameObject grupoParado = GruposFueraSinPrioridad(grupo);
         if (grupoParado)
         {
-            grupoParado.GetComponent<EnemyStats>().Prioridad = prioridad; //Llamar a la función BUSCAR X/Y
+            grupoParado.GetComponent<EnemyStats>().prioridad = prioridad; //Llamar a la función BUSCAR X/Y
         }
         else
         {
@@ -172,7 +172,7 @@ public class Decisiones : MonoBehaviour
 
     public bool GrupoConPrioridad(GameObject grupo)
     {
-        return grupo.GetComponent<EnemyStats>().Prioridad != Enumerados.Priorities.None;
+        return grupo.GetComponent<EnemyStats>().prioridad != Enumerados.Priorities.None;
     }
 
     public GameObject EnemigoCerca(GameObject grupo)
@@ -213,7 +213,7 @@ public class Decisiones : MonoBehaviour
     public void NuevoGrupo(int num, Enumerados.Priorities prioridad)
     {
         GameObject Group = Instantiate(groupPrefab,this.transform.position, Quaternion.identity);
-        Group.GetComponent<EnemyStats>().Prioridad = prioridad;
+        Group.GetComponent<EnemyStats>().prioridad = prioridad;
         Group.GetComponent<EnemyStats>().numComponentesGrupo = num;
         unidadesDentroCiudad -= num;
         grupos.Add(Group);
