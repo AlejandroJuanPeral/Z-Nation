@@ -5,14 +5,15 @@ using UnityEngine.UI;
 
 public class BottonScript : MonoBehaviour
 {
-    public GameObject Manager;
+    public GameObject Manager,Group1,Group2;
     public InputField Input;
  
-    public void Merge(Slider slider, GameObject Group1, GameObject Group2)
+    public void Merge(Slider slider)
     {
         Group1.GetComponent<PlayerStats> ().numComponentesGrupo =(int) slider.value;
         Group2.GetComponent<PlayerStats>().numComponentesGrupo = (int) slider.maxValue - (int) slider.value;
-
+        if (Group1.GetComponent<PlayerStats>().numComponentesGrupo == 0) Destroy(Group1);
+        if (Group2.GetComponent<PlayerStats>().numComponentesGrupo == 0) Destroy(Group2);
     }
     public void SeparatePanel()
     {
@@ -21,14 +22,11 @@ public class BottonScript : MonoBehaviour
     }
     public void Separate(Slider slider)
     {
-        //Manager.GetComponent<PlayerManager>().SeparateNewGroup(slider.maxValue - slider.value);
-
+        Manager.GetComponent<PlayerManager>().SeparateNewGroup((int)(slider.maxValue - slider.value));
     }
     public void newGroup()
     {
-
-        //Manager.GetComponent<PlayerManager>().NewGroup((int)Input.text);
-
+        Manager.GetComponent<PlayerManager>().NewGroup(System.Convert.ToInt32(Input.text));
     }
 
     public void EndTurn()
@@ -42,7 +40,7 @@ public class BottonScript : MonoBehaviour
     }
     public void CreateUnit(Text unitText)
     {
-        Manager.GetComponent<PlayerManager>().UpdateBarracon();
+        Manager.GetComponent<PlayerManager>().NewUnit();
 
     }
     public void UpdateBarracon(Text BarText)

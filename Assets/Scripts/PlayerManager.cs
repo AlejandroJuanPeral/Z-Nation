@@ -5,38 +5,52 @@ using UnityEngine.UI;
 
 public class PlayerManager : MonoBehaviour
 {
-    public GameObject FinishButton, CityPanel, RecoursesPanel, MergePanel, UnitPanel, SeparatePanel;
+    public GameObject FinishButton, CityPanel, RecoursesPanel, MergePanel, UnitPanel, SeparatePanel, Button, GameManager;
     public Text UnitMovement, BarraconText, UnitText, RecourseText;
-    public Slider SepSlider;
-    public int Food, ConRecourse, Units, MaxUnits, UnitsInCity, LevelBarracon,aux;
+    public Slider SepSlider,MergeSlider;
+    public int Food, Resources, Units, MaxUnits, UnitsInCity, LevelBarracon,aux;
     public List<GameObject> Groups = new List<GameObject>();
-    public GameObject GrupPrefab;
+    public GameObject GroupPrefab;
     // Start is called before the first frame update
     void Start()
     {
         Food = 50;
-        ConRecourse = 30;
+        Resources = 30;
         Units = 0;
         LevelBarracon = 0;
         MaxUnits = LevelBarracon * 3;
         aux = 0;
-        RecourseText.text = "Alimento: " + Food.ToString("0000") + " Rec.Construcción: " + ConRecourse.ToString("0000") + "/n Unidades: " + Units + " / " + MaxUnits;
+        RecourseText.text = "Alimento: " + Food.ToString("0000") + " Rec.Construcción: " + Resources.ToString("0000") + "/n Unidades: " + Units + " / " + MaxUnits;
     }
-
+    private void Update()
+    {
+        UnitMovement.text = "Movimiento " + Groups[aux].GetComponent<PlayerMovement>().cantNodos;
+    }
     // Update is called once per frame
-
+    public void TakeFood(int num)
+    {
+        Food += num;
+        RecourseText.text = "Alimento: " + Food.ToString("0000") + " Rec.Construcción: " + Resources.ToString("0000") + "/n Unidades: " + Units + " / " + MaxUnits;
+    }
+    public void TakeResources(int num)
+    {
+        Resources += num;
+        RecourseText.text = "Alimento: " + Food.ToString("0000") + " Rec.Construcción: " + Resources.ToString("0000") + "/n Unidades: " + Units + " / " + MaxUnits;
+    }
     void PlayerTurn()
     {
         Food += 10;
-        RecourseText.text = "Alimento: " + Food.ToString("0000") + " Rec.Construcción: " + ConRecourse.ToString("0000") + "/n Unidades: " + Units + " / " + MaxUnits;
+        Food -= Units;
+        RecourseText.text = "Alimento: " + Food.ToString("0000") + " Rec.Construcción: " + Resources.ToString("0000") + "/n Unidades: " + Units + " / " + MaxUnits;
         FinishButton.SetActive(true);
         if (Groups.Count > 0)
         {
             aux = 0;
             UnitPanel.SetActive(true);
-            UnitMovement.text = "";
-            //llama move grupo1
-            //Groups[aux].Move;
+            //llama a mover grupo
+            if (Groups[aux] == null) NextGroup();
+            GameManager.GetComponent<MovingManager>().player = Groups[aux];
+            Groups[aux].GetComponent<PlayerMovement>().NextTurn();
         }
         else
         {
@@ -49,9 +63,10 @@ public class PlayerManager : MonoBehaviour
 
         if (Groups.Count > aux)
         {
+            if (Groups[aux] == null) NextGroup();
             UnitMovement.text = "";
-            //llama move grupo
-            //Groups[aux].Move;
+            GameManager.GetComponent<MovingManager>().player = Groups[aux];
+            Groups[aux].GetComponent<PlayerMovement>().NextTurn();
         }
         else
         {
@@ -65,18 +80,18 @@ public class PlayerManager : MonoBehaviour
         CityPanel.SetActive(false);
 
         FinishButton.SetActive(false);
+        //Manager turno enemigo------------------------------------------------------------------
     }
     public void UpdateBarracon()
     {
-        if (ConRecourse >= (LevelBarracon*30)*0.5 + 30)
+        if (Resources >= (LevelBarracon*30)*0.5 + 30)
         {
             LevelBarracon++;
-            ConRecourse -= Mathf.RoundToInt((LevelBarracon * 30) * 0.5f + 30);
+            Resources -= Mathf.RoundToInt((LevelBarracon * 30) * 0.5f + 30);
             BarraconText.text = "Barracon(nv" + LevelBarracon + ")/n" + Mathf.RoundToInt((LevelBarracon * 30) * 0.5f + 30);
             MaxUnits += 3; 
             UnitText.text = "Unidades (" + Units + "/" + MaxUnits + ")/n 10";
-            RecourseText.text = "Alimento: " + Food.ToString("0000") + " Rec.Construcción: " + ConRecourse.ToString("0000") + "/n Unidades: " + Units + " / " + MaxUnits;
-        
+            RecourseText.text = "Alimento: " + Food.ToString("0000") + " Rec.Construcción: " + Resources.ToString("0000") + "/n Unidades: " + Units + " / " + MaxUnits;
         }
     }
     public void NewUnit()
@@ -86,7 +101,7 @@ public class PlayerManager : MonoBehaviour
             Units++;
             Food -= 10;
             UnitText.text = "Unidades (" + Units + "/" + MaxUnits + ")/n 10";
-            RecourseText.text = "Alimento: " + Food.ToString("0000") + " Rec.Construcción: " + ConRecourse.ToString("0000") + "/n Unidades: " + Units + " / " + MaxUnits;
+            RecourseText.text = "Alimento: " + Food.ToString("0000") + " Rec.Construcción: " + Resources.ToString("0000") + "/n Unidades: " + Units + " / " + MaxUnits;
         }
 
     }
@@ -94,8 +109,9 @@ public class PlayerManager : MonoBehaviour
     {
         if (num <= UnitsInCity)
         {
-            //GameObject Group = Instantiate(GrupPrefab,,);
-            //Group.GetComponent<PlayerStats>().numComponentesGrupo = num;
+            GameObject Group = Instantiate(GroupPrefab, this.transform.position, Quaternion.identity);
+            Group.GetComponent<PlayerStats>().numComponentesGrupo = num;
+            Groups.Add(Group);
             UnitsInCity -= num;
         }
     }
@@ -109,9 +125,23 @@ public class PlayerManager : MonoBehaviour
     {
         if (num < Groups[aux].GetComponent<PlayerStats>().numComponentesGrupo)
         {
-            //GameObject Group = Instantiate(GrupPrefab,,);
-            //Group.GetComponent<PlayerStats>().numComponentesGrupo = num;
+            GameObject Group = Instantiate(GroupPrefab, this.transform.position, Quaternion.identity);
+            Group.GetComponent<PlayerStats>().numComponentesGrupo = num;
+            Groups.Add(Group);
             Groups[aux].GetComponent<PlayerStats>().numComponentesGrupo -= num;
         }
+    }
+    public void MergeGroups(GameObject Group1, GameObject Group2)
+    {
+        Button.GetComponent<BottonScript>().Group1 = Group1;
+        Button.GetComponent<BottonScript>().Group2 = Group2;
+        MergePanel.SetActive(true);
+        MergeSlider.value = Group1.GetComponent<PlayerStats>().numComponentesGrupo;
+        MergeSlider.maxValue = Group2.GetComponent<PlayerStats>().numComponentesGrupo+ Group1.GetComponent<PlayerStats>().numComponentesGrupo;
+    }
+    public void EnterCity(GameObject Group)
+    {
+        UnitsInCity += Group.GetComponent<PlayerStats>().numComponentesGrupo;
+        Destroy(Group);
     }
 }
