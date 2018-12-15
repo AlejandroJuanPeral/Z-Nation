@@ -16,7 +16,7 @@ public class EnemyMovement : MonoBehaviour
 
     List<Nodo> vecinos;
 
-    List<Nodo> allVisible;
+    public List<Nodo> allVisible;
 
     int levelIndex = 0;
 
@@ -27,6 +27,8 @@ public class EnemyMovement : MonoBehaviour
     int index;
 
     int cantNodos = EnemyStats.cantidadMovimientos;
+
+    public GameObject ciudadPropia;
 
     // Start is called before the first frame update
     void Start()
@@ -47,60 +49,76 @@ public class EnemyMovement : MonoBehaviour
 
         EnemyVisibility();
 
-       
 
-        
+
+
     }
 
     void EnemyVisibility()
     {
 
-        if(allVisible.Count > 0)
+        if (allVisible.Count > 0)
         {
             //Reiniciamos
             //Debug.Log("Hay que reiniciar los visible");
             ResetAllVisibles();
         }
-        
+
         allVisible.Clear();
         actual = grid.NodeFromWorldPoint(transform.position);
         actual.prefab.GetComponent<Renderer>().material.color = pathColor;
 
         VisitingNeighbours(actual);
 
-        
+
 
         cola.Clear();
-        
-        
+
+
     }
 
     Nodo DecisionMovement()
     {
         Nodo maxValue = allVisible[0];
-        foreach(Nodo n in allVisible)
+        foreach (Nodo n in allVisible)
         {
-            if(n.resourceCost != -1)
+            if (n.resourceCost != -1)
             {
-                if(n.resourceCost > maxValue.resourceCost)
+                if (n.resourceCost > maxValue.resourceCost)
                 {
                     maxValue = n;
                 }
             }
         }
-        if(maxValue == allVisible[0] && EnemyExplorerMovement.nodosForVisiting.Count>0)
+
+        if (this.gameObject.GetComponent<EnemyStats>().Prioridad == Enumerados.Priorities.Alimento)
         {
-            //Encontramos el nodo más cercano de los que ha visto el explorador y ese será
-            maxValue = GetNodoExplorerCercano();
+            if (maxValue == allVisible[0] && EnemyExplorerMovement.nodosForVisitingFood.Count > 0)
+            {
+                maxValue = GetNodoExplorerCercano(EnemyExplorerMovement.nodosForVisitingFood);//Encontramos el nodo más cercano de los que ha visto el explorador y ese será
+            }
+            return maxValue;
         }
-        return maxValue;
+        else if (this.gameObject.GetComponent<EnemyStats>().Prioridad == Enumerados.Priorities.Materiales)
+        {
+            if (maxValue == allVisible[0] && EnemyExplorerMovement.nodosForVisitingResources.Count > 0)
+            {
+                 maxValue = GetNodoExplorerCercano(EnemyExplorerMovement.nodosForVisitingResources);//Encontramos el nodo más cercano de los que ha visto el explorador y ese será
+            }
+            return maxValue;
+        }
+        else
+        {
+            maxValue = grid.NodeFromWorldPoint(ciudadPropia.transform.position);
+            return maxValue;
+        }
 
-    }
-
-    Nodo GetNodoExplorerCercano()
-    {
+    } 
         
-        List<Nodo> aux = EnemyExplorerMovement.nodosForVisiting;
+
+    Nodo GetNodoExplorerCercano( List<Nodo> aux)
+    {
+
         Nodo cercano = aux[0];
         foreach (Nodo n in aux)
         {
@@ -120,7 +138,7 @@ public class EnemyMovement : MonoBehaviour
         return cercano;
     }
 
-    void MoveTo(Nodo n)
+    public void MoveTo(Nodo n)
     {
         Nodo anteriorAux = grid.NodeFromWorldPoint(transform.position);
 
