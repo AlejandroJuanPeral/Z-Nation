@@ -643,8 +643,10 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\Andrea\Scripts\EnemyExplorerMovement.cs" />
     <Compile Include="Assets\Andrea\Scripts\EnemyMovement.cs" />
     <Compile Include="Assets\Andrea\Scripts\EnemyStats.cs" />
+    <Compile Include="Assets\Andrea\Scripts\EnemyValues.cs" />
     <Compile Include="Assets\Andrea\Scripts\Grid.cs" />
     <Compile Include="Assets\Andrea\Scripts\Influence.cs" />
     <Compile Include="Assets\Andrea\Scripts\Moving.cs" />
@@ -654,14 +656,12 @@
     <Compile Include="Assets\Andrea\Scripts\PlayerMovement.cs" />
     <Compile Include="Assets\Andrea\Scripts\PlayerStats.cs" />
     <Compile Include="Assets\Andrea\Scripts\ResourceStat.cs" />
-    <Compile Include="Assets\Scripts\GameManager.cs" />
-    <Compile Include="Assets\Scripts\HexCell.cs" />
-    <Compile Include="Assets\Scripts\HexCoordinates.cs" />
-    <Compile Include="Assets\Scripts\HexDirection.cs" />
-    <Compile Include="Assets\Scripts\HexGrid.cs" />
-    <Compile Include="Assets\Scripts\HexMapEditor.cs" />
-    <Compile Include="Assets\Scripts\HexMesh.cs" />
-    <Compile Include="Assets\Scripts\HexMetrics.cs" />
+    <Compile Include="Assets\Scripts\BottonScript.cs" />
+    <Compile Include="Assets\Scripts\CameraController.cs" />
+    <Compile Include="Assets\Scripts\PlayerManager.cs" />
+    <Compile Include="Assets\Scripts\SliderText.cs" />
+    <Compile Include="Assets\Vero\Scripts\Decisiones.cs" />
+    <Compile Include="Assets\Vero\Scripts\Enumerados.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Materials\VertexColors.shader" />
