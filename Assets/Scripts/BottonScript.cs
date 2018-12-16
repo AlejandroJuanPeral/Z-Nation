@@ -38,12 +38,12 @@ public class BottonScript : MonoBehaviour
     {
         Manager.GetComponent<PlayerManager>().NextGroup();
     }
-    public void CreateUnit(Text unitText)
+    public void CreateUnit()
     {
         Manager.GetComponent<PlayerManager>().NewUnit();
 
     }
-    public void UpdateBarracon(Text BarText)
+    public void UpdateBarracon()
     {
         Manager.GetComponent<PlayerManager>().UpdateBarracon();
 
