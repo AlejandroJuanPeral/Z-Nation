@@ -11,6 +11,7 @@ TagManager:
   - Zombie
   - Food
   - Construct
+  - Resource
   layers:
   - Default
   - TransparentFX
