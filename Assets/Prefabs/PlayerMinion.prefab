@@ -1001,6 +1001,7 @@ GameObject:
   - component: {fileID: 75846356198553455}
   - component: {fileID: 75846356440024770}
   - component: {fileID: 5165068645925509188}
+  - component: {fileID: 4639477365715367713}
   m_Layer: 0
   m_Name: PlayerMinion
   m_TagString: Player
@@ -1062,6 +1063,7 @@ MonoBehaviour:
   colorReachable: {r: 0.9150943, g: 0, b: 0.7712294, a: 0}
   pathColor: {r: 0.9528302, g: 0.09438412, b: 0.09438412, a: 0}
   isMoving: 0
+  cantNodos: 5
 --- !u!65 &5165068645925509188
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1075,6 +1077,19 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1.96, z: 1}
   m_Center: {x: 0, y: 0.61, z: 0}
+--- !u!114 &4639477365715367713
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 75846356189152483}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5ce0bf049913fc44aa4b74e358588f4e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  numComponentesGrupo: 0
 --- !u!1 &75846356189152485
 GameObject:
   m_ObjectHideFlags: 0

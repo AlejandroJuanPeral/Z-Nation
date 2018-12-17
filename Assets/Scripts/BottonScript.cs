@@ -26,7 +26,10 @@ public class BottonScript : MonoBehaviour
     }
     public void newGroup()
     {
-        Manager.GetComponent<PlayerManager>().NewGroup(System.Convert.ToInt32(Input.text));
+        string aux = Input.text;
+        int num = System.Convert.ToInt32(aux);
+
+        Manager.GetComponent<PlayerManager>().NewGroup(num);
     }
 
     public void EndTurn()

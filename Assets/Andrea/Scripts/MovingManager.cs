@@ -21,7 +21,6 @@ public class MovingManager : MonoBehaviour
     
 
 
-
     //Crear variables que influyen en el movimiento
 
     public bool CanMove
@@ -32,11 +31,16 @@ public class MovingManager : MonoBehaviour
         }
     }
 
+    public void NewAssigmentGroup(GameObject group)
+    {
+        player = group;
+        playerMovement = player.GetComponent<PlayerMovement>();
+    }
     // Start is called before the first frame update
     void Start()
     {
 
-        playerMovement = player.GetComponent<PlayerMovement>();
+        //playerMovement = player.GetComponent<PlayerMovement>();
 
         grid = GameObject.Find("GameManager").GetComponent<Grid>();
     }
@@ -78,9 +82,13 @@ public class MovingManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (playerMovement.isMoving)
+        if(player != null)
         {
-            playerMovement.MoveTo(selectedNode);
+            if (playerMovement.isMoving)
+            {
+                playerMovement.MoveTo(selectedNode);
+            }
         }
+    
     }
 }

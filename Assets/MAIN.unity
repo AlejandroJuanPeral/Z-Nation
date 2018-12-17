@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657844, g: 0.49641222, b: 0.57481694, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -359,67 +359,67 @@ PrefabInstance:
     - target: {fileID: 5633941814563045931, guid: c6760efa779bf4aeb9563c30ed6fe387,
         type: 3}
       propertyPath: m_Layer
-      value: 10
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5633941814563045947, guid: c6760efa779bf4aeb9563c30ed6fe387,
         type: 3}
       propertyPath: m_Layer
-      value: 10
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5633941814563045945, guid: c6760efa779bf4aeb9563c30ed6fe387,
         type: 3}
       propertyPath: m_Layer
-      value: 10
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5633941814563045951, guid: c6760efa779bf4aeb9563c30ed6fe387,
         type: 3}
       propertyPath: m_Layer
-      value: 10
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6124373588873129233, guid: c6760efa779bf4aeb9563c30ed6fe387,
         type: 3}
       propertyPath: m_Layer
-      value: 10
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5633941814563045933, guid: c6760efa779bf4aeb9563c30ed6fe387,
         type: 3}
       propertyPath: m_Layer
-      value: 10
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5633941814563045949, guid: c6760efa779bf4aeb9563c30ed6fe387,
         type: 3}
       propertyPath: m_Layer
-      value: 10
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 806278252031251080, guid: c6760efa779bf4aeb9563c30ed6fe387,
         type: 3}
       propertyPath: m_Layer
-      value: 10
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2455166260320103077, guid: c6760efa779bf4aeb9563c30ed6fe387,
         type: 3}
       propertyPath: m_Layer
-      value: 10
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3417437200122645145, guid: c6760efa779bf4aeb9563c30ed6fe387,
         type: 3}
       propertyPath: m_Layer
-      value: 10
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4814577863174521192, guid: c6760efa779bf4aeb9563c30ed6fe387,
         type: 3}
       propertyPath: m_Layer
-      value: 10
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1368707287603619625, guid: c6760efa779bf4aeb9563c30ed6fe387,
         type: 3}
       propertyPath: m_Layer
-      value: 10
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8225539618094774995, guid: c6760efa779bf4aeb9563c30ed6fe387,
         type: 3}
       propertyPath: m_Layer
-      value: 10
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c6760efa779bf4aeb9563c30ed6fe387, type: 3}
@@ -545,16 +545,6 @@ PrefabInstance:
       propertyPath: Manager
       value: 
       objectReference: {fileID: 1660548206}
-    - target: {fileID: 4091291052556455001, guid: 4151f38aeb1c52843a75d26732456518,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5895777298450910676, guid: 4151f38aeb1c52843a75d26732456518,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4151f38aeb1c52843a75d26732456518, type: 3}
 --- !u!114 &709342606 stripped
@@ -745,6 +735,18 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5c273053d895c4c1291849bdd29eaf9c, type: 3}
+--- !u!114 &889230242 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 889230242, guid: 4151f38aeb1c52843a75d26732456518,
+    type: 3}
+  m_PrefabInstance: {fileID: 709342605}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 708705254, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &919219297 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 8402560316350450708, guid: 362d3e9edbb8b834686fdc06f617a044,
@@ -832,13 +834,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9bd090439242c234d8ddd0b7e7d0fe0b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  player: {fileID: 1298512524}
---- !u!1 &1298512524 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 75846356189152483, guid: 933586204749be54e8456c783cb43a6a,
-    type: 3}
-  m_PrefabInstance: {fileID: 1489380141}
-  m_PrefabAsset: {fileID: 0}
+  player: {fileID: 0}
 --- !u!1001 &1489380141
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -905,6 +901,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: PlayerMinion
+      objectReference: {fileID: 0}
+    - target: {fileID: 75846356189152483, guid: 933586204749be54e8456c783cb43a6a,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 933586204749be54e8456c783cb43a6a, type: 3}
@@ -1020,6 +1021,7 @@ MonoBehaviour:
   BarraconText: {fileID: 709342614}
   UnitText: {fileID: 709342613}
   RecourseText: {fileID: 709342611}
+  UnitCity: {fileID: 889230242}
   SepSlider: {fileID: 709342606}
   MergeSlider: {fileID: 709342609}
   Food: 0

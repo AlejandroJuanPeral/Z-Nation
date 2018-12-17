@@ -6,7 +6,7 @@ using UnityEngine.UI;
 public class PlayerManager : MonoBehaviour
 {
     public GameObject FinishButton, CityPanel, RecoursesPanel, MergePanel, UnitPanel, SeparatePanel, Button, GameManager;
-    public Text UnitMovement, BarraconText, UnitText, RecourseText;
+    public Text UnitMovement, BarraconText, UnitText, RecourseText,UnitCity;
     public Slider SepSlider,MergeSlider;
     public int Food, Resources, Units, MaxUnits, UnitsInCity, LevelBarracon,aux;
     public List<GameObject> Groups = new List<GameObject>();
@@ -14,42 +14,51 @@ public class PlayerManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        
         Food = 50;
         Resources = 30;
         Units = 0;
         LevelBarracon = 0;
         MaxUnits = LevelBarracon * 3;
         aux = 0;
-        RecourseText.text = "Alimento: " + Food.ToString("0000") + " Rec.Construcción: " + Resources.ToString("0000") + "/n Unidades: " + Units + " / " + MaxUnits;
+        RecourseText.text = "Alimento: " + Food.ToString("0000") + " Rec.Construcción: " + Resources.ToString("0000") + '\n' + " Unidades: " + Units + " / " + MaxUnits;
+
+        PlayerTurn();
     }
     private void Update()
     {
-        UnitMovement.text = "Movimiento " + Groups[aux].GetComponent<PlayerMovement>().cantNodos;
+        if (Groups.Count > 0 && Groups[aux] != null)
+        {
+            UnitMovement.text = "Movimiento " + Groups[aux].GetComponent<PlayerMovement>().cantNodos;
+
+        }
+
     }
     // Update is called once per frame
     public void TakeFood(int num)
     {
         Food += num;
-        RecourseText.text = "Alimento: " + Food.ToString("0000") + " Rec.Construcción: " + Resources.ToString("0000") + "/n Unidades: " + Units + " / " + MaxUnits;
+        RecourseText.text = "Alimento: " + Food.ToString("0000") + " Rec.Construcción: " + Resources.ToString("0000") + '\n' + " Unidades: " + Units + " / " + MaxUnits;
     }
     public void TakeResources(int num)
     {
         Resources += num;
-        RecourseText.text = "Alimento: " + Food.ToString("0000") + " Rec.Construcción: " + Resources.ToString("0000") + "/n Unidades: " + Units + " / " + MaxUnits;
+        RecourseText.text = "Alimento: " + Food.ToString("0000") + " Rec.Construcción: " + Resources.ToString("0000") + '\n' + " Unidades: " + Units + " / " + MaxUnits;
     }
     void PlayerTurn()
     {
         Food += 10;
         Food -= Units;
-        RecourseText.text = "Alimento: " + Food.ToString("0000") + " Rec.Construcción: " + Resources.ToString("0000") + "/n Unidades: " + Units + " / " + MaxUnits;
+        RecourseText.text = "Alimento: " + Food.ToString("0000") + " Rec.Construcción: " + Resources.ToString("0000") + '\n' + " Unidades: " + Units + " / " + MaxUnits;
         FinishButton.SetActive(true);
         if (Groups.Count > 0)
         {
             aux = 0;
             UnitPanel.SetActive(true);
             //llama a mover grupo
+            
             if (Groups[aux] == null) NextGroup();
-            GameManager.GetComponent<MovingManager>().player = Groups[aux];
+            GameManager.GetComponent<MovingManager>().NewAssigmentGroup(Groups[aux]);
             Groups[aux].GetComponent<PlayerMovement>().NextTurn();
         }
         else
@@ -65,7 +74,7 @@ public class PlayerManager : MonoBehaviour
         {
             if (Groups[aux] == null) NextGroup();
             UnitMovement.text = "";
-            GameManager.GetComponent<MovingManager>().player = Groups[aux];
+            GameManager.GetComponent<MovingManager>().NewAssigmentGroup(Groups[aux]);
             Groups[aux].GetComponent<PlayerMovement>().NextTurn();
         }
         else
@@ -80,18 +89,18 @@ public class PlayerManager : MonoBehaviour
         CityPanel.SetActive(false);
 
         FinishButton.SetActive(false);
-        //Manager turno enemigo------------------------------------------------------------------
+        PlayerTurn();
     }
     public void UpdateBarracon()
     {
         if (Resources >= (LevelBarracon*30)*0.5 + 30)
         {
+            Resources -= (int) ((LevelBarracon * 30) * 0.5f + 30);
             LevelBarracon++;
-            Resources -= Mathf.RoundToInt((LevelBarracon * 30) * 0.5f + 30);
-            BarraconText.text = "Barracon(nv" + LevelBarracon + ")/n" + Mathf.RoundToInt((LevelBarracon * 30) * 0.5f + 30);
+            BarraconText.text = "Barracon(nv" + LevelBarracon + ")\n" + Mathf.RoundToInt((LevelBarracon * 30) * 0.5f + 30);
             MaxUnits += 3; 
-            UnitText.text = "Unidades (" + Units + "/" + MaxUnits + ")/n 10";
-            RecourseText.text = "Alimento: " + Food.ToString("0000") + " Rec.Construcción: " + Resources.ToString("0000") + "/n Unidades: " + Units + " / " + MaxUnits;
+            UnitText.text = "Unidades (" + Units + "/" + MaxUnits + ")\n 10";
+            RecourseText.text = "Alimento: " + Food.ToString("0000") + " Rec.Construcción: " + Resources.ToString("0000") + '\n' + " Unidades: " + Units + " / " + MaxUnits;
         }
     }
     public void NewUnit()
@@ -99,9 +108,11 @@ public class PlayerManager : MonoBehaviour
         if(Food >= 10 && Units < MaxUnits)
         {
             Units++;
+            UnitsInCity++;
             Food -= 10;
-            UnitText.text = "Unidades (" + Units + "/" + MaxUnits + ")/n 10";
-            RecourseText.text = "Alimento: " + Food.ToString("0000") + " Rec.Construcción: " + Resources.ToString("0000") + "/n Unidades: " + Units + " / " + MaxUnits;
+            UnitCity.text = "Unidades ciudad: " + UnitsInCity;
+            UnitText.text = "Unidades (" + Units + "/" + MaxUnits + ")\n 10";
+            RecourseText.text = "Alimento: " + Food.ToString("0000") + " Rec.Construcción: " + Resources.ToString("0000") + '\n' + " Unidades: " + Units + " / " + MaxUnits;
         }
 
     }
@@ -113,6 +124,7 @@ public class PlayerManager : MonoBehaviour
             Group.GetComponent<PlayerStats>().numComponentesGrupo = num;
             Groups.Add(Group);
             UnitsInCity -= num;
+            UnitCity.text = "Unidades ciudad: " + UnitsInCity;
         }
     }
     public void Separate()
