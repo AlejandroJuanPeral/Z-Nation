@@ -68,6 +68,8 @@ public class PlayerManager : MonoBehaviour
     }
     public void NextGroup()
     {
+        SeparatePanel.SetActive(false);
+        MergePanel.SetActive(false);
         aux = aux + 1;
 
         if (Groups.Count > aux)
@@ -86,6 +88,8 @@ public class PlayerManager : MonoBehaviour
     }
     public void FinishTurn()
     {
+        SeparatePanel.SetActive(false);
+        MergePanel.SetActive(false);
         CityPanel.SetActive(false);
 
         FinishButton.SetActive(false);
@@ -137,6 +141,7 @@ public class PlayerManager : MonoBehaviour
     {
         if (num < Groups[aux].GetComponent<PlayerStats>().numComponentesGrupo)
         {
+            MergePanel.SetActive(false);
             GameObject Group = Instantiate(GroupPrefab, this.transform.position, Quaternion.identity);
             Group.GetComponent<PlayerStats>().numComponentesGrupo = num;
             Groups.Add(Group);
