@@ -98,7 +98,7 @@ public class Decisiones : MonoBehaviour
                 {
                     if (!EnemigoFuerte(grupo, grupoEnemigo))
                     {
-                        AttackPlayer(grupoEnemigo);
+                        grupo.GetComponent<EnemyMovement>().AttackPlayer(grupoEnemigo);
                     }
                 }
             }          
@@ -161,6 +161,10 @@ public class Decisiones : MonoBehaviour
 
                 NuevoGrupo(rdn, prioridad);    //Llamar a la función CREAR GRUPO DE UNIDADES (numComponentesGrupo = nº unidades en el grupo)
                                             //Se le asignará una prioridad y llamará a la función BUSCAR X/Y.
+            }
+            else
+            {
+                //pasar turno
             }
         }
     }
