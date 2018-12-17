@@ -142,7 +142,7 @@ PrefabInstance:
     - target: {fileID: 3296111405305543908, guid: 6aaf3db3ca0930e489508aa5135c32c6,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: -55.5
+      value: 18.2
       objectReference: {fileID: 0}
     - target: {fileID: 3296111405305543908, guid: 6aaf3db3ca0930e489508aa5135c32c6,
         type: 3}
@@ -152,7 +152,7 @@ PrefabInstance:
     - target: {fileID: 3296111405305543908, guid: 6aaf3db3ca0930e489508aa5135c32c6,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: -55.3
+      value: 29.3
       objectReference: {fileID: 0}
     - target: {fileID: 3296111405305543908, guid: 6aaf3db3ca0930e489508aa5135c32c6,
         type: 3}
@@ -211,17 +211,17 @@ PrefabInstance:
     - target: {fileID: 4769778806939286018, guid: e25ea5ee6b5f1f648b2ccd157c779725,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: -61.4
+      value: -51.7
       objectReference: {fileID: 0}
     - target: {fileID: 4769778806939286018, guid: e25ea5ee6b5f1f648b2ccd157c779725,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4769778806939286018, guid: e25ea5ee6b5f1f648b2ccd157c779725,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: -50.5
+      value: -17.7
       objectReference: {fileID: 0}
     - target: {fileID: 4769778806939286018, guid: e25ea5ee6b5f1f648b2ccd157c779725,
         type: 3}
@@ -420,11 +420,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Layer
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5633941814563045931, guid: c6760efa779bf4aeb9563c30ed6fe387,
-        type: 3}
-      propertyPath: m_TagString
-      value: CityPlayer
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c6760efa779bf4aeb9563c30ed6fe387, type: 3}
@@ -1131,11 +1126,6 @@ PrefabInstance:
       propertyPath: ciudadPropia
       value: 
       objectReference: {fileID: 480830913}
-    - target: {fileID: 8402560316350450708, guid: 362d3e9edbb8b834686fdc06f617a044,
-        type: 3}
-      propertyPath: m_TagString
-      value: CityEnemy
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 362d3e9edbb8b834686fdc06f617a044, type: 3}
 --- !u!1 &1697733845

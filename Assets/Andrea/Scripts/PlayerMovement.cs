@@ -7,7 +7,7 @@ public class PlayerMovement : MonoBehaviour
 
     public Color colorReachable;
     public Color pathColor;
-    public bool final;
+
 
 
     Grid grid;
@@ -26,7 +26,6 @@ public class PlayerMovement : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        final = false;
         grid = GameObject.Find("GameManager").GetComponent<Grid>();
 
         manager = GameObject.FindGameObjectWithTag("CityPlayer");
@@ -102,7 +101,6 @@ public class PlayerMovement : MonoBehaviour
 
         if (actualAux != anteriorAux)
         {
-            final = false;
             cantNodos--;
             if (cantNodos == 0)
             {
@@ -111,16 +109,16 @@ public class PlayerMovement : MonoBehaviour
             }
         }
 
-        if (this.gameObject.transform.position == n.worldPosition && final == false)
+        if (this.gameObject.transform.position == n.worldPosition)
         {
-            if(n.objectInNode.tag == "Food")
+            if(n.objectInNode.tag == "Food" && n.objectInNode.GetComponent<Influence>().recolectado == false)
             {
                 manager.GetComponent<PlayerManager>().TakeFood(30);
                 n.objectInNode.GetComponent<Influence>().recolectado = true;
                 n.objectInNode.GetComponent<Influence>().DestroyThis();
 
             }
-            else if(n.objectInNode.tag == "Resource")
+            else if(n.objectInNode.tag == "Resource" && n.objectInNode.GetComponent<Influence>().recolectado == false)
             {
 
                 manager.GetComponent<PlayerManager>().TakeResources(30);
@@ -146,7 +144,7 @@ public class PlayerMovement : MonoBehaviour
             {
                 //ATACAR CIUDAD
             }
-            final = true;
+
            //if (n.objectInNode)
            //{
            //    n.objectInNode.GetComponent<Influence>().DestroyThis();

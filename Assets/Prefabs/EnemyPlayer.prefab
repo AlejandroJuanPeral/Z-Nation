@@ -324,7 +324,7 @@ GameObject:
   - component: {fileID: 3205328209994728734}
   m_Layer: 0
   m_Name: EnemyPlayer
-  m_TagString: Enemy
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -396,8 +396,6 @@ MonoBehaviour:
   colorReachable: {r: 1, g: 0, b: 0.7402892, a: 0}
   pathColor: {r: 1, g: 0.9476305, b: 0, a: 0}
   move: 0
-  allVisible: []
-  ciudadPropia: {fileID: 0}
 --- !u!1 &8402560316350450710
 GameObject:
   m_ObjectHideFlags: 0
