@@ -115,7 +115,18 @@ public class EnemyMovement : MonoBehaviour
             return maxValue;
         }
 
-    } 
+    }
+    
+    public void AttackPlayer(GameObject player)
+    {
+        int numGroupPlayer = player.GetComponent<PlayerStats>().numComponentesGrupo;
+
+        int rdn = Random.Range(0, numGroupPlayer);
+
+        this.gameObject.GetComponent<EnemyStats>().numComponentesGrupo -= rdn;
+        Destroy(player);
+
+    }
         
     Nodo GetNodoExplorerCercano( List<Nodo> aux)
     {

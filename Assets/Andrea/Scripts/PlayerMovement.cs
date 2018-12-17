@@ -8,6 +8,8 @@ public class PlayerMovement : MonoBehaviour
     public Color colorReachable;
     public Color pathColor;
 
+
+
     Grid grid;
 
     List<Nodo> allVisible;
@@ -17,12 +19,16 @@ public class PlayerMovement : MonoBehaviour
     public bool isMoving = false;
 
     public int cantNodos = PlayerStats.cantidadNodosPorTurno;
+
+    public GameObject manager;
     
 
     // Start is called before the first frame update
     void Start()
     {
         grid = GameObject.Find("GameManager").GetComponent<Grid>();
+
+        manager = GameObject.FindGameObjectWithTag("CityPlayer");
 
         allVisible = new List<Nodo>();
 
@@ -68,7 +74,9 @@ public class PlayerMovement : MonoBehaviour
 
     public void NextTurn()
     {
+
         cantNodos = PlayerStats.cantidadNodosPorTurno;
+
     }
 
     void PlayerVisibility()
@@ -103,12 +111,95 @@ public class PlayerMovement : MonoBehaviour
 
         if (this.gameObject.transform.position == n.worldPosition)
         {
-            if (n.objectInNode)
+            if(n.objectInNode.tag == "Food" && n.objectInNode.GetComponent<Influence>().recolectado == false)
             {
+                manager.GetComponent<PlayerManager>().TakeFood(30);
+                n.objectInNode.GetComponent<Influence>().recolectado = true;
                 n.objectInNode.GetComponent<Influence>().DestroyThis();
+
+            }
+            else if(n.objectInNode.tag == "Resource" && n.objectInNode.GetComponent<Influence>().recolectado == false)
+            {
+
+                manager.GetComponent<PlayerManager>().TakeResources(30);
+                n.objectInNode.GetComponent<Influence>().recolectado = true;
+                n.objectInNode.GetComponent<Influence>().DestroyThis();
+
+
+            }
+            else if(n.objectInNode.tag == "Enemy")
+            {
+                AttackEnemy(n.objectInNode);
+            }
+            else if(n.objectInNode.tag == "Player")
+            {
+                manager.GetComponent<PlayerManager>().MergeGroups(this.gameObject, n.objectInNode);
+            }
+            else if(n.objectInNode.tag == "CityPlayer")
+            {
+                manager.GetComponent<PlayerManager>().UnitsInCity += this.gameObject.GetComponent<PlayerStats>().numComponentesGrupo;
+                Destroy(this.gameObject);
+            }
+            else if(n.objectInNode.tag == "CityEnemy")
+            {
+                //ATACAR CIUDAD
+            }
+
+           //if (n.objectInNode)
+           //{
+           //    n.objectInNode.GetComponent<Influence>().DestroyThis();
+           //}
+        }
+        
+        PlayerVisibility();
+
+
+    }
+
+    public void AttackEnemy(GameObject enemy)
+    {
+        int numGroupEnemy = enemy.GetComponent<EnemyStats>().numComponentesGrupo;
+        int numGroupPlayer = this.gameObject.GetComponent<PlayerStats>().numComponentesGrupo;
+        int rdn;
+
+        if(numGroupEnemy < numGroupPlayer)
+        {
+            rdn = Random.Range(0, numGroupEnemy);
+            this.gameObject.GetComponent<PlayerStats>().numComponentesGrupo -= rdn;
+            Destroy(enemy);
+        }
+        else if(numGroupEnemy == numGroupPlayer)
+        {
+            if( Random.Range(0, 1) == 1) //Ganas tu
+            {
+                rdn = Random.Range(0, numGroupEnemy);
+                this.gameObject.GetComponent<PlayerStats>().numComponentesGrupo -= rdn;
+                Destroy(enemy);
+                if(this.gameObject.GetComponent<PlayerStats>().numComponentesGrupo == 0)
+                {
+                    Destroy(this.gameObject);
+                }
+            }
+            else
+            {
+                rdn = Random.Range(0, numGroupPlayer);
+                enemy.gameObject.GetComponent<EnemyStats>().numComponentesGrupo -= rdn;
+               
+                if (enemy.gameObject.GetComponent<EnemyStats>().numComponentesGrupo == 0)
+                {
+                    Destroy(enemy);
+                }
+
+                Destroy(this.gameObject);
             }
         }
-        PlayerVisibility();
+        else
+        {
+            rdn = Random.Range(0, numGroupPlayer);
+            enemy.gameObject.GetComponent<EnemyStats>().numComponentesGrupo -= rdn;
+            Destroy(this.gameObject);
+
+        }
 
 
     }
