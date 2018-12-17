@@ -8,6 +8,7 @@ public class Influence : MonoBehaviour
 
     public int maxLevelSearch;
 
+    public bool recolectado = false;
 
     Grid grid;
     Nodo actual;
