@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class BottonScript : MonoBehaviour
 {
-    public GameObject Manager,Group1,Group2;
+    public GameObject Manager,Group1,Group2,MergePanel;
     public InputField Input;
  
     public void Merge(Slider slider)
@@ -14,6 +14,7 @@ public class BottonScript : MonoBehaviour
         Group2.GetComponent<PlayerStats>().numComponentesGrupo = (int) slider.maxValue - (int) slider.value;
         if (Group1.GetComponent<PlayerStats>().numComponentesGrupo == 0) Destroy(Group1);
         if (Group2.GetComponent<PlayerStats>().numComponentesGrupo == 0) Destroy(Group2);
+        MergePanel.SetActive(false);
     }
     public void SeparatePanel()
     {
