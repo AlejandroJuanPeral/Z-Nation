@@ -20,11 +20,13 @@ public class EnemyStats : MonoBehaviour
 
     //public Enumerados.Priorities Prioridad { get; set; }
 
-   
-    public EnemyStats(Enumerados.Priorities priori)
+   void Start(){
+    
+   }
+   /* public EnemyStats(Enumerados.Priorities priori)
     {
         prioridad = priori;
-    }
+    }*/
 
     
 

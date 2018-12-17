@@ -35,6 +35,7 @@ public class EnemyMovement : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        ciudadPropia = GameObject.FindWithTag("CityEnemy");
         grid = GameObject.Find("GameManager").GetComponent<Grid>();
         allVisible = new List<Nodo>();
         index = 0;

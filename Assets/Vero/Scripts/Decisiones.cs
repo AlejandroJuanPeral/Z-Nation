@@ -4,15 +4,12 @@ using UnityEngine;
 
 public class Decisiones : MonoBehaviour
 {
-    public int alimento = EnemyValues.alimentos; // Alimento suficiente = Nº Unidades x2
-    public int materiales = EnemyValues.materiales;
     public GameObject ciudadEnemiga;
     public Grid grid;
 
-    public int barracones = EnemyValues.cantBarracones;
     public int unidadesTotales = EnemyValues.numTotalUnidades;
     public int unidadesDentroCiudad = EnemyValues.numUnidadesCiudad;
-    public List<GameObject> grupos = EnemyValues.totalGroups;
+    public List<GameObject> grupos = new List<GameObject>();
 
     public int coste_Barracon;
     public int coste_Unidad = 10;//alimento
@@ -26,61 +23,52 @@ public class Decisiones : MonoBehaviour
         grid = GameObject.Find("GameManager").GetComponent<Grid>();
     }
     //Ejecutarse mientras tengamos material y alimento
-    void DecisionesCiudad() {
-        if (AlimentoSuficienteParaMantener(alimento, unidadesTotales))
+    public void DecisionesCiudad() {
+    	if (unidadesDentroCiudad > 10)
         {
-            if (BarraconesLibres(barracones, unidadesTotales))
+        	EnviarAtaque();
+		}
+
+        if (AlimentoSuficienteParaMantener(EnemyValues.alimentos, EnemyValues.numTotalUnidades))
+        {
+            if (BarraconesLibres(EnemyValues.cantBarracones, EnemyValues.numTotalUnidades))
             {
-                if (AlimentoSuficienteParaCrear(alimento, coste_Unidad))
+                if (AlimentoSuficienteParaCrear(EnemyValues.alimentos, coste_Unidad))
                 {
                     NuevaUnidad();
+                    DecisionesCiudad();
                 }
                 else //No tiene alimento suficiente para mantener las unidades + crear nuevas
                 {
-                    ProcesarGrupoParado(grupos, Enumerados.Priorities.Alimento);
+                    ProcesarGrupoParado(Enumerados.Priorities.Alimento);
                 }
             }
             else //No hay barracones sin ocupar
             {
-                if (MaterialSuficiente(materiales))
+                if (MaterialSuficiente(EnemyValues.materiales))
                 {
                     NuevoBarracon();
+                    DecisionesCiudad();
                 }
                 else //No tiene materiales suficiente para construir
                 {
-                    ProcesarGrupoParado(grupos, Enumerados.Priorities.Materiales);
+                    ProcesarGrupoParado(Enumerados.Priorities.Materiales);
                 }
             }
         }
-        else //No tiene alimento suficiente para mantener las unidades
+        else  //No tiene alimento suficiente para mantener las unidades
         {
-            ProcesarGrupoParado(grupos, Enumerados.Priorities.Alimento);
-        }
-
-        if (unidadesDentroCiudad > 10)
-        {
-            int random = Random.Range(0, 3);
-            if (random == 2)
-            {
-                int resto = unidadesDentroCiudad % 10;
-                int numGrupos = unidadesDentroCiudad / 10;
-                if (resto > 1)//Porque quiero que se queden al menos 2 unidades en la ciudad
-                {
-                    for (int i = 0; i < numGrupos; i++)
-                    {
-                        GrupoAtaque(); //Enviar (unidades.Count/10) grupos de 10 unidades a atacar la ciudad enemiga
-                    }
-
-                }
-            }
+            ProcesarGrupoParado(Enumerados.Priorities.Alimento);
         }
 
     }
 
+
+
     public void DecisionGrupo() {
 
 
-        if (UnidadesFueraCiudad(grupos))
+        if (UnidadesFueraCiudad())
         {
             foreach (GameObject grupo in grupos)
             {
@@ -92,15 +80,12 @@ public class Decisiones : MonoBehaviour
                         grupo.GetComponent<EnemyMovement>().AttackPlayer(grupoEnemigo);
                     }
                 }
+                //mover el grupo--------------------------------------------------------------------------------------------------------
             }
         }
 
-        EnemyValues.alimentos = alimento;
-        EnemyValues.materiales = materiales;
-        EnemyValues.numTotalUnidades = unidadesTotales;
         EnemyValues.numUnidadesCiudad = unidadesDentroCiudad;
         EnemyValues.totalGroups = grupos;
-        EnemyValues.cantBarracones = barracones;
     }
 
  
@@ -195,7 +180,7 @@ public class Decisiones : MonoBehaviour
 
     public bool BarraconesLibres(int barracones, int unidades)
     {
-        return barracones > unidades/2;
+        return barracones > unidades/3;
     }
 
     public bool AlimentoSuficienteParaCrear(int alimento, int unidades)
@@ -203,7 +188,7 @@ public class Decisiones : MonoBehaviour
         return alimento > (unidades * 2) + coste_Unidad;
     }
 
-    public GameObject GruposFueraSinPrioridad(List<GameObject> grupos)
+    public GameObject GruposFueraSinPrioridad()
     {
         foreach (GameObject grupo in grupos)
         {
@@ -213,16 +198,13 @@ public class Decisiones : MonoBehaviour
         return null;
     }
 
-    public void ProcesarGrupoParado(List<GameObject> grupo, Enumerados.Priorities prioridad)
+    public void ProcesarGrupoParado(Enumerados.Priorities prioridad)
     {
-        GameObject grupoParado = GruposFueraSinPrioridad(grupo);
-        if (grupoParado)
+        GameObject grupoParado = GruposFueraSinPrioridad();
+
+        if (grupoParado == null)
         {
-            grupoParado.GetComponent<EnemyStats>().prioridad = prioridad; //Llamar a la función BUSCAR X/Y
-        }
-        else
-        {
-            if (unidadesDentroCiudad > 1)
+        	if (unidadesDentroCiudad > 1)
             {
                 int rdn;
                 if (unidadesDentroCiudad > 9)
@@ -235,16 +217,22 @@ public class Decisiones : MonoBehaviour
                 }
 
                 NuevoGrupo(rdn, prioridad);    //Llamar a la función CREAR GRUPO DE UNIDADES (numComponentesGrupo = nº unidades en el grupo)
-                                               //Se le asignará una prioridad y llamará a la función BUSCAR X/Y.
-            }
-            else
-            {
-                PasarTurno();//pasar turno al jugador
-            }
+                DecisionesCiudad();				//Se le asignará una prioridad y llamará a la función BUSCAR X/Y.
+
+            }                                   
+        	else
+        	PasarTurno();
+        }
+        else if (grupoParado != null)
+        {
+            grupoParado.GetComponent<EnemyStats>().prioridad = prioridad; //Llamar a la función BUSCAR X/Y
+            grupoParado.GetComponent<EnemyMovement>().move = true;
+            DecisionesCiudad();
+
         }
     }
 
-    public bool UnidadesFueraCiudad(List<GameObject> grupos)
+    public bool UnidadesFueraCiudad()
     {
         return grupos.Count > 0;
     }
@@ -274,26 +262,28 @@ public class Decisiones : MonoBehaviour
 
     public int CosteBarracon()
     {
-        return (int)((barracones * 30) * 0.5f + 30);
+        return (int)((EnemyValues.cantBarracones * 30) * 0.5f + 30);
     }
 
     public void NuevoBarracon()
     {
-        materiales -= coste_Barracon;
-        barracones++;
+        EnemyValues.materiales -= coste_Barracon;
+        EnemyValues.cantBarracones++;
     }
 
     public void NuevaUnidad()
     {
+       	EnemyValues.numTotalUnidades++;
         unidadesDentroCiudad++;
-        alimento -= 10;
+        EnemyValues.alimentos -= 10;
     }
 
     public void NuevoGrupo(int num, Enumerados.Priorities prioridad)
-    {
+    {        	
         GameObject Group = Instantiate(groupPrefab, this.transform.position, Quaternion.identity);
+        Group.AddComponent<EnemyStats>();
         Group.GetComponent<EnemyStats>().prioridad = prioridad;
-        Group.GetComponent<EnemyStats>().numComponentesGrupo = num;
+       	Group.GetComponent<EnemyStats>().numComponentesGrupo = num;
         unidadesDentroCiudad -= num;
         grupos.Add(Group);
     }
@@ -314,6 +304,23 @@ public class Decisiones : MonoBehaviour
             g.GetComponent<EnemyMovement>().NewTurn();
         }
     }
+
+    public void EnviarAtaque()
+	{
+        int random = Random.Range(0, 3);
+        if (random == 2)
+        {
+            int resto = unidadesDentroCiudad % 10;
+            int numGrupos = unidadesDentroCiudad / 10;
+            if (resto > 1)//Porque quiero que se queden al menos 2 unidades en la ciudad
+            {
+                for (int i = 0; i < numGrupos; i++)
+                {
+                    GrupoAtaque(); //Enviar (unidades.Count/10) grupos de 10 unidades a atacar la ciudad enemiga
+                }
+            }
+        }
+	}
 
 }
 
