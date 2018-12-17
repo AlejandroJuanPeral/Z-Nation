@@ -11,6 +11,8 @@ public class PlayerManager : MonoBehaviour
     public int Food, Resources, Units, MaxUnits, UnitsInCity, LevelBarracon,aux;
     public List<GameObject> Groups = new List<GameObject>();
     public GameObject GroupPrefab;
+
+    public EnemyValues enemigo;
     // Start is called before the first frame update
     void Start()
     {
@@ -45,7 +47,7 @@ public class PlayerManager : MonoBehaviour
         Resources += num;
         RecourseText.text = "Alimento: " + Food.ToString("0000") + " Rec.Construcción: " + Resources.ToString("0000") + '\n' + " Unidades: " + Units + " / " + MaxUnits;
     }
-    void PlayerTurn()
+    public void PlayerTurn()
     {
         Food += 10;
         Food -= Units;
@@ -93,7 +95,9 @@ public class PlayerManager : MonoBehaviour
         CityPanel.SetActive(false);
 
         FinishButton.SetActive(false);
-        PlayerTurn();
+        //PlayerTurn();
+        enemigo.LlamarCorutinaEnemigo();
+        
     }
     public void UpdateBarracon()
     {

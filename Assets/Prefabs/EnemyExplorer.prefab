@@ -1079,6 +1079,7 @@ GameObject:
   - component: {fileID: 5497268044915501061}
   - component: {fileID: 4991643127699574528}
   - component: {fileID: 4991643127699574527}
+  - component: {fileID: 118908712}
   m_Layer: 0
   m_Name: EnemyExplorer
   m_TagString: Untagged
@@ -1150,13 +1151,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 13b3fbded16281444be8f6f8d3e4973b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  colorReachable: {r: 1, g: 0, b: 0.80021286, a: 0}
-  pathColor: {r: 1, g: 0.5358716, b: 0, a: 0}
+  colorReachable: {r: 0, g: 0, b: 0, a: 0}
+  pathColor: {r: 0, g: 0, b: 0, a: 0}
   move: 0
-  positions:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
+  positions: []
+--- !u!114 &118908712
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5497268044924853189}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 84b0b44992ecaf24d9e5c2eb5358e347, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  numComponentesGrupo: 1
+  prioridad: 0
 --- !u!1 &5497268044924853191
 GameObject:
   m_ObjectHideFlags: 0
