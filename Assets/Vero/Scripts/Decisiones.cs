@@ -98,7 +98,7 @@ public class Decisiones : MonoBehaviour
                 {
                     if (!EnemigoFuerte(grupo, grupoEnemigo))
                     {
-                        AttackPlayer(grupoEnemigo);
+                       // AttackPlayer(grupoEnemigo);
                     }
                 }
             }          
