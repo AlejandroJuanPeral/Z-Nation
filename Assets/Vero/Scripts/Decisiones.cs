@@ -164,7 +164,7 @@ public class Decisiones : MonoBehaviour
             }
             else
             {
-                //pasar turno
+                PasarTurno();//pasar turno al jugador
             }
         }
     }
@@ -236,7 +236,7 @@ public class Decisiones : MonoBehaviour
     {
         foreach(GameObject g in grupos)
         {
-            g.GetComponent<EnemyMovement>().NewTurn;
+            g.GetComponent<EnemyMovement>().NewTurn();
         }
     }
 
