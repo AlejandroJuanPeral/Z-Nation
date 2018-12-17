@@ -179,6 +179,7 @@ public class EnemyMovement : MonoBehaviour
                     Debug.Log("Alimento ");
                     EnemyExplorerMovement.nodosForVisitingFood.Remove(n);
                     n.objectInNode.gameObject.GetComponent<Influence>().DestroyThis();
+                    this.gameObject.GetComponent<EnemyStats>().prioridad = Enumerados.Priorities.None;
                 }
 
                 else if(n.objectInNode.tag == "Resource" && this.gameObject.GetComponent<EnemyStats>().prioridad == Enumerados.Priorities.Materiales)
@@ -187,6 +188,7 @@ public class EnemyMovement : MonoBehaviour
 
                     EnemyExplorerMovement.nodosForVisitingResources.Remove(n);
                     n.objectInNode.gameObject.GetComponent<Influence>().DestroyThis();
+                    this.gameObject.GetComponent<EnemyStats>().prioridad = Enumerados.Priorities.None;
                 }
             }
 
@@ -198,7 +200,7 @@ public class EnemyMovement : MonoBehaviour
 
     }
     //Para que sea un nuevo turno se llama a esta función y se pone a true el bool move
-    void NewTurn()
+    public void NewTurn()
     {
         cantNodos = EnemyStats.cantidadMovimientos;
     }
