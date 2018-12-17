@@ -12,8 +12,6 @@ TagManager:
   - Food
   - Construct
   - Resource
-  - CityPlayer
-  - CityEnemy
   layers:
   - Default
   - TransparentFX
