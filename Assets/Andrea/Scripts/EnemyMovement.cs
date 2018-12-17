@@ -30,7 +30,8 @@ public class EnemyMovement : MonoBehaviour
 
     public GameObject ciudadPropia;
 
-    private 
+    public bool withNodeDecision;
+    public Nodo decisionNode;
 
     // Start is called before the first frame update
     void Start()
@@ -82,7 +83,9 @@ public class EnemyMovement : MonoBehaviour
 
     Nodo DecisionMovement()
     {
-        Nodo maxValue = allVisible[0];
+
+        Nodo maxValue = grid.NodeFromWorldPoint(ciudadPropia.transform.position);
+
         foreach (Nodo n in allVisible)
         {
             if (n.resourceCost != -1)
@@ -90,36 +93,66 @@ public class EnemyMovement : MonoBehaviour
                 if (n.resourceCost > maxValue.resourceCost)
                 {
                     maxValue = n;
+                   
                 }
             }
-        }
+           // if(n.objectInNode.tag == "CityPlayer")
+           // {
+           //     //Attack city
+           // }
 
-        if (this.gameObject.GetComponent<EnemyStats>().prioridad == Enumerados.Priorities.Alimento)
-        {
-            if (maxValue == allVisible[0] && EnemyExplorerMovement.nodosForVisitingFood.Count > 0)
-            {
-                maxValue = GetNodoExplorerCercano(EnemyExplorerMovement.nodosForVisitingFood);//Encontramos el nodo más cercano de los que ha visto el explorador y ese será
-            }
-            return maxValue;
         }
-        else if (this.gameObject.GetComponent<EnemyStats>().prioridad == Enumerados.Priorities.Materiales)
+        if(maxValue != grid.NodeFromWorldPoint(ciudadPropia.transform.position))
         {
-            if (maxValue == allVisible[0] && EnemyExplorerMovement.nodosForVisitingResources.Count > 0)
-            {
-                 maxValue = GetNodoExplorerCercano(EnemyExplorerMovement.nodosForVisitingResources);//Encontramos el nodo más cercano de los que ha visto el explorador y ese será
-            }
+            decisionNode = maxValue;
+            withNodeDecision = true;
             return maxValue;
         }
         else
         {
-            maxValue = grid.NodeFromWorldPoint(ciudadPropia.transform.position);
-            return maxValue;
+            if (this.gameObject.GetComponent<EnemyStats>().prioridad == Enumerados.Priorities.Alimento)
+            {
+                if (maxValue == grid.NodeFromWorldPoint(ciudadPropia.transform.position) && EnemyExplorerMovement.nodosForVisitingFood.Count > 0)
+                {
+                    maxValue = GetNodoExplorerCercano(EnemyExplorerMovement.nodosForVisitingFood);//Encontramos el nodo más cercano de los que ha visto el explorador y ese será
+                }
+                return maxValue;
+            }
+            else if (this.gameObject.GetComponent<EnemyStats>().prioridad == Enumerados.Priorities.Materiales)
+            {
+                if (maxValue == grid.NodeFromWorldPoint(ciudadPropia.transform.position) && EnemyExplorerMovement.nodosForVisitingResources.Count > 0)
+                {
+                    maxValue = GetNodoExplorerCercano(EnemyExplorerMovement.nodosForVisitingResources);//Encontramos el nodo más cercano de los que ha visto el explorador y ese será
+                }
+                return maxValue;
+            }
+            else
+            {
+                if (EnemyExplorerMovement.nodosForVisitingFood.Count > 0)
+                {
+                    maxValue = GetNodoExplorerCercano(EnemyExplorerMovement.nodosForVisitingFood);
+                }
+                else if (EnemyExplorerMovement.nodosForVisitingResources.Count > 0)
+                {
+                    maxValue = GetNodoExplorerCercano(EnemyExplorerMovement.nodosForVisitingResources);
+                }
+                else
+                {
+                    maxValue = grid.NodeFromWorldPoint(ciudadPropia.transform.position);
+                }
+
+                return maxValue;
+            }
         }
+
+        
 
     }
     
     public void AttackPlayer(GameObject player)
     {
+        decisionNode = grid.NodeFromWorldPoint(player.transform.position);
+        withNodeDecision = true;
         int numGroupPlayer = player.GetComponent<PlayerStats>().numComponentesGrupo;
 
         int rdn = Random.Range(0, numGroupPlayer);
@@ -172,31 +205,44 @@ public class EnemyMovement : MonoBehaviour
         if (actualAux == n)
         {
             Debug.Log("Llegado al destino");
+            decisionNode = null;
+            withNodeDecision = false;
             if (n.objectInNode != null)
             {
 
-                if (n.objectInNode.tag == "Food" && this.gameObject.GetComponent<EnemyStats>().prioridad == Enumerados.Priorities.Alimento)
+                if (n.objectInNode.tag == "Food")
                 {
                     Debug.Log("Alimento ");
-                    EnemyExplorerMovement.nodosForVisitingFood.Remove(n);
+                    if (EnemyExplorerMovement.nodosForVisitingFood.Contains(n)){
+                        EnemyExplorerMovement.nodosForVisitingFood.Remove(n);
+
+                    }
                     n.objectInNode.gameObject.GetComponent<Influence>().DestroyThis();
+                    
+                    EnemyValues.alimentos += 30;
                     this.gameObject.GetComponent<EnemyStats>().prioridad = Enumerados.Priorities.None;
                 }
 
-                else if(n.objectInNode.tag == "Resource" && this.gameObject.GetComponent<EnemyStats>().prioridad == Enumerados.Priorities.Materiales)
+                else if(n.objectInNode.tag == "Resource")
                 {
                     Debug.Log("resource ");
+                    if (EnemyExplorerMovement.nodosForVisitingResources.Contains(n))
+                    {
+                        EnemyExplorerMovement.nodosForVisitingResources.Remove(n);
 
-                    EnemyExplorerMovement.nodosForVisitingResources.Remove(n);
+                    }
                     n.objectInNode.gameObject.GetComponent<Influence>().DestroyThis();
+                    
+                    EnemyValues.materiales += 30;
                     this.gameObject.GetComponent<EnemyStats>().prioridad = Enumerados.Priorities.None;
                 }
             }
-
+            n.objectInNode = this.gameObject;
             //HAY QUE HACER UNA FUNCION QUE RESETEE EL NODO AL QUE VA DESPUES DE QUE LLEGUE
 
         }
         EnemyVisibility();
+       
 
 
     }
@@ -236,7 +282,22 @@ public class EnemyMovement : MonoBehaviour
                 allVisible.Add(aux[i]);
                 aux[i].isVisibleEnemy = true;
                 cola.Enqueue(aux[i]);
-               
+
+                if(aux[i].objectInNode.tag == "Food")
+                {
+                    if (!EnemyExplorerMovement.nodosForVisitingFood.Contains(aux[i]))
+                    {
+                        EnemyExplorerMovement.nodosForVisitingFood.Add(aux[i]);
+                    }
+                }
+                if (aux[i].objectInNode.tag == "Resource")
+                {
+                    if (!EnemyExplorerMovement.nodosForVisitingResources.Contains(aux[i]))
+                    {
+                        EnemyExplorerMovement.nodosForVisitingResources.Add(aux[i]);
+                    }
+                }
+
             }
         }
         
@@ -251,9 +312,18 @@ public class EnemyMovement : MonoBehaviour
         //EnemyVisibility();
         if (move)
         {
-            MoveTo(DecisionMovement());
+            if(withNodeDecision && decisionNode != null)
+            {
+                MoveTo(decisionNode);
+            }
+            else
+            {
+                MoveTo(DecisionMovement());
+
+            }
 
         }
+
 
 
 

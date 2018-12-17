@@ -154,7 +154,7 @@ public class EnemyExplorerMovement : MonoBehaviour
         return aux;
     }
     //Para que sea un nuevo turno se llama a esta función y se pone a true el bool move
-    void NewTurn()
+    public void NewTurn()
     {
         cantNodos = EnemyStats.movimientoExplorer;
     }

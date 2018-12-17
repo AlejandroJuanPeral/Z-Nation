@@ -35,6 +35,7 @@ public class PlayerMovement : MonoBehaviour
 
         actual = grid.NodeFromWorldPoint(transform.position);
         actual.prefab.GetComponent<Renderer>().material.color = pathColor;
+        actual.objectInNode = this.gameObject;
         VisitingNeighbours(actual);
 
     }
@@ -100,6 +101,8 @@ public class PlayerMovement : MonoBehaviour
 
         Nodo actualAux = grid.NodeFromWorldPoint(transform.position);
 
+        anteriorAux.objectInNode = null;
+
         if (actualAux != anteriorAux)
         {
             final = false;
@@ -147,6 +150,7 @@ public class PlayerMovement : MonoBehaviour
                 //ATACAR CIUDAD
             }
             final = true;
+            n.objectInNode = this.gameObject;
            //if (n.objectInNode)
            //{
            //    n.objectInNode.GetComponent<Influence>().DestroyThis();

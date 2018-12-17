@@ -86,13 +86,17 @@ public class Influence : MonoBehaviour
     public void DestroyThis()
     {
         List<Nodo> aux = grid.GetNeighboursInLevel(actual, maxLevelSearch);
-
-        for (int i = 0; i < aux.Count; i++)
+        actual.objectInNode = null;
+        actual.resourceCost = -1;
+        actual.prefab.GetComponent<Renderer>().material.color = Color.black;
+        foreach(Nodo n in aux)
         {
-            aux[i].resourceCost = -1;
-            aux[i].prefab.GetComponent<Renderer>().material.color = Color.black;
+            n.resourceCost = -1;
+            n.prefab.GetComponent<Renderer>().material.color = Color.black;
+            //n.objectInNode = null;
         }
         Destroy(this.gameObject,0.5f);
+        actual.objectInNode = null;
     }
 
     // Update is called once per frame

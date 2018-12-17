@@ -17,10 +17,14 @@ public class Decisiones : MonoBehaviour
 
     public GameObject groupPrefab;
 
+    public GameObject explorer;
+    int indexExplorer = 0;
+
     private void Start()
     {
         coste_Barracon = CosteBarracon();
         grid = GameObject.Find("GameManager").GetComponent<Grid>();
+        EnemyValues.explorer = explorer;
     }
     //Ejecutarse mientras tengamos material y alimento
     public void DecisionesCiudad() {
@@ -61,6 +65,8 @@ public class Decisiones : MonoBehaviour
             ProcesarGrupoParado(Enumerados.Priorities.Alimento);
         }
 
+        DecisionGrupo();
+
     }
 
 
@@ -78,8 +84,16 @@ public class Decisiones : MonoBehaviour
                     if (!EnemigoFuerte(grupo, grupoEnemigo))
                     {
                         grupo.GetComponent<EnemyMovement>().AttackPlayer(grupoEnemigo);
+                        grupo.GetComponent<EnemyMovement>().move = true;
+
+
                     }
                 }
+                else
+                {
+                    grupo.GetComponent<EnemyMovement>().move = true;
+                }
+               
                 //mover el grupo--------------------------------------------------------------------------------------------------------
             }
         }
@@ -247,7 +261,11 @@ public class Decisiones : MonoBehaviour
         List<Nodo> aux = grupo.GetComponent<EnemyMovement>().allVisible;
         foreach (Nodo n in aux)
         {
-            if (n.objectInNode.tag == "Player")
+            if(n.objectInNode == null)
+            {
+                continue;
+            }
+            else if (n.objectInNode.tag == "Player")
             {
                 return n.objectInNode;
             }
@@ -281,10 +299,11 @@ public class Decisiones : MonoBehaviour
     public void NuevoGrupo(int num, Enumerados.Priorities prioridad)
     {        	
         GameObject Group = Instantiate(groupPrefab, this.transform.position, Quaternion.identity);
-        Group.AddComponent<EnemyStats>();
+        //Group.AddComponent<EnemyStats>();
         Group.GetComponent<EnemyStats>().prioridad = prioridad;
        	Group.GetComponent<EnemyStats>().numComponentesGrupo = num;
         unidadesDentroCiudad -= num;
+        Group.GetComponent<EnemyMovement>().move = true;
         grupos.Add(Group);
     }
 
