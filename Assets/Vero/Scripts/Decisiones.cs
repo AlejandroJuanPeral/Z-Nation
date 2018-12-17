@@ -26,16 +26,13 @@ public class Decisiones : MonoBehaviour
         grid = GameObject.Find("GameManager").GetComponent<Grid>();
     }
 
-    public Decisiones(int alimento, int materiales, int barracones, int unidades, List<GameObject> grupos, int coste_Barracon, int coste_Unidad, int coste_MantenimientoUnidad)
+    public Decisiones(int alimento, int materiales, int barracones, int unidades, List<GameObject> grupos)
     {
         this.alimento = alimento;
         this.materiales = materiales;
         this.barracones = barracones;
         unidadesTotales = unidades;
         this.grupos = grupos;
-        this.coste_Barracon = coste_Barracon;
-        this.coste_Unidad = coste_Unidad;
-        this.coste_MantenimientoUnidad = coste_MantenimientoUnidad;
 
 
 
