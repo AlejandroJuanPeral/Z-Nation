@@ -232,6 +232,14 @@ public class Decisiones : MonoBehaviour
         grupos.Add(Group);
     }
 
+    public void PasarTurno()
+    {
+        foreach(GameObject g in grupos)
+        {
+            g.GetComponent<EnemyMovement>().NewTurn;
+        }
+    }
+
 }
 
 
