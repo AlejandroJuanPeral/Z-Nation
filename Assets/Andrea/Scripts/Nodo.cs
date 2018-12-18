@@ -29,6 +29,7 @@ public class Nodo
 
 
 
+
     public Nodo(bool a_IsWall, Vector3 _worldPos, int _gridX, int _gridY)
     {
         IsWall = a_IsWall;

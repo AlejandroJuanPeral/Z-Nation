@@ -70,6 +70,7 @@ public class MovingManager : MonoBehaviour
         selectedNode = grid.NodeFromWorldPoint(node.gameObject.transform.position);
 
         playerMovement.isMoving = true;
+        
 
         
 

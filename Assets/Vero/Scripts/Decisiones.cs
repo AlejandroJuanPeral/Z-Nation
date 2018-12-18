@@ -7,9 +7,6 @@ public class Decisiones : MonoBehaviour
     public GameObject ciudadEnemiga;
     public Grid grid;
 
-    public int unidadesTotales = EnemyValues.numTotalUnidades;
-    public int unidadesDentroCiudad = EnemyValues.numUnidadesCiudad;
-    public List<GameObject> grupos = new List<GameObject>();
 
     public int coste_Barracon;
     public int coste_Unidad = 10;//alimento
@@ -35,7 +32,7 @@ public class Decisiones : MonoBehaviour
     public void DecisionesCiudad() {
         nodoCiudadEnemiga.objectInNode = this.gameObject;
 
-        if (unidadesDentroCiudad > 10)
+        if (EnemyValues.numUnidadesCiudad > 10)
         {
         	EnviarAtaque();
 		}
@@ -71,8 +68,6 @@ public class Decisiones : MonoBehaviour
         {
             ProcesarGrupoParado(Enumerados.Priorities.Alimento);
         }
-        EnemyValues.numUnidadesCiudad = unidadesDentroCiudad;
-        EnemyValues.totalGroups = grupos;
 
     }
 
@@ -83,7 +78,7 @@ public class Decisiones : MonoBehaviour
         nodoCiudadEnemiga.objectInNode = this.gameObject;
         if (UnidadesFueraCiudad())
         {
-            foreach (GameObject grupo in grupos)
+            foreach (GameObject grupo in EnemyValues.totalGroups)
             {
                 GameObject grupoEnemigo = EnemigoCerca(grupo);
                 if (grupoEnemigo!=null)
@@ -105,8 +100,6 @@ public class Decisiones : MonoBehaviour
             }
         }
 
-        EnemyValues.numUnidadesCiudad = unidadesDentroCiudad;
-        EnemyValues.totalGroups = grupos;
     }
 
  
@@ -211,7 +204,7 @@ public class Decisiones : MonoBehaviour
 
     public GameObject GruposFueraSinPrioridad()
     {
-        foreach (GameObject grupo in grupos)
+        foreach (GameObject grupo in EnemyValues.totalGroups)
         {
             if (grupo.GetComponent<EnemyStats>().prioridad == Enumerados.Priorities.None) return grupo;
         }
@@ -225,16 +218,16 @@ public class Decisiones : MonoBehaviour
 
         if (grupoParado == null)
         {
-        	if (unidadesDentroCiudad > 1)
+        	if (EnemyValues.numUnidadesCiudad > 1 && EnemyValues.numUnidadesCiudad > EnemyValues.numTotalUnidades/2.25)
             {
                 int rdn;
-                if (unidadesDentroCiudad > 9)
+                if (EnemyValues.numUnidadesCiudad > 9)
                 {
                     rdn = Random.Range(1, 10);
                 }
                 else
                 {
-                    rdn = Random.Range(1, unidadesDentroCiudad - 1);
+                    rdn = Random.Range(1, EnemyValues.numUnidadesCiudad - 1);
                 }
 
                 NuevoGrupo(rdn, prioridad);    //Llamar a la función CREAR GRUPO DE UNIDADES (numComponentesGrupo = nº unidades en el grupo)
@@ -255,7 +248,7 @@ public class Decisiones : MonoBehaviour
 
     public bool UnidadesFueraCiudad()
     {
-        return grupos.Count > 0;
+        return EnemyValues.totalGroups.Count > 0;
     }
 
     public bool GrupoConPrioridad(GameObject grupo)
@@ -299,7 +292,7 @@ public class Decisiones : MonoBehaviour
     public void NuevaUnidad()
     {
        	EnemyValues.numTotalUnidades++;
-        unidadesDentroCiudad++;
+        EnemyValues.numUnidadesCiudad++;
         EnemyValues.alimentos -= 10;
     }
 
@@ -309,23 +302,27 @@ public class Decisiones : MonoBehaviour
         //Group.AddComponent<EnemyStats>();
         Group.GetComponent<EnemyStats>().prioridad = prioridad;
        	Group.GetComponent<EnemyStats>().numComponentesGrupo = num;
-        unidadesDentroCiudad -= num;
+        EnemyValues.numUnidadesCiudad -= num;
         //Group.GetComponent<EnemyMovement>().move = true;
-        grupos.Add(Group);
+        EnemyValues.totalGroups.Add(Group);
     }
 
     public void GrupoAtaque()
     {
         GameObject Group = Instantiate(groupPrefab, this.transform.position, Quaternion.identity);
-        Group.GetComponent<EnemyMovement>().MoveTo(grid.NodeFromWorldPoint(ciudadEnemiga.transform.position));
+
         Group.GetComponent<EnemyStats>().numComponentesGrupo = 10;
-        unidadesDentroCiudad -= 10;
-        grupos.Add(Group);
+        Group.GetComponent<EnemyMovement>().decisionNode = grid.NodeFromWorldPoint(ciudadEnemiga.transform.position);
+        Group.GetComponent<EnemyMovement>().withNodeDecision = true;
+        EnemyValues.numUnidadesCiudad -= 10;
+        EnemyValues.totalGroups.Add(Group);
+       // Group.GetComponent<EnemyMovement>().MoveTo(grid.NodeFromWorldPoint(ciudadEnemiga.transform.position));
+        
     }
 
     public void PasarTurno()
     {
-        foreach (GameObject g in grupos)
+        foreach (GameObject g in EnemyValues.totalGroups)
         {
             g.GetComponent<EnemyMovement>().NewTurn();
         }
@@ -336,8 +333,8 @@ public class Decisiones : MonoBehaviour
         int random = Random.Range(0, 3);
         if (random == 2)
         {
-            int resto = unidadesDentroCiudad % 10;
-            int numGrupos = unidadesDentroCiudad / 10;
+            int resto = EnemyValues.numUnidadesCiudad % 10;
+            int numGrupos = EnemyValues.numUnidadesCiudad / 10;
             if (resto > 1)//Porque quiero que se queden al menos 2 unidades en la ciudad
             {
                 for (int i = 0; i < numGrupos; i++)

@@ -21,6 +21,8 @@ public class PlayerMovement : MonoBehaviour
     public int cantNodos = PlayerStats.cantidadNodosPorTurno;
 
     public GameObject manager;
+
+    Animator anim;
     
 
     // Start is called before the first frame update
@@ -40,6 +42,8 @@ public class PlayerMovement : MonoBehaviour
             actual.objectInNode = this.gameObject;
 
         }
+
+        anim = GetComponent<Animator>();
         VisitingNeighbours(actual);
 
     }
@@ -100,8 +104,10 @@ public class PlayerMovement : MonoBehaviour
     public void MoveTo(Nodo n)
     {
         Nodo anteriorAux = grid.NodeFromWorldPoint(transform.position);
+        Vector3 aux = new Vector3(n.worldPosition.x, this.transform.position.y, n.worldPosition.z);
+        this.gameObject.transform.position = Vector3.MoveTowards(this.gameObject.transform.position, aux, EnemyStats.speed * Time.deltaTime);
 
-        this.gameObject.transform.position = Vector3.MoveTowards(this.gameObject.transform.position, n.worldPosition, EnemyStats.speed * Time.deltaTime);
+        anim.SetBool("isRunning", true);
 
         Nodo actualAux = grid.NodeFromWorldPoint(transform.position);
 
@@ -118,6 +124,7 @@ public class PlayerMovement : MonoBehaviour
             if (cantNodos == 0)
             {
                 isMoving = false;
+                anim.SetBool("isRunning", false);
                 Debug.Log("Se ha terminado el turno ");
             }
         }

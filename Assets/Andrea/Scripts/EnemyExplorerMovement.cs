@@ -48,6 +48,8 @@ public class EnemyExplorerMovement : MonoBehaviour
 
     int cantNodos = EnemyStats.movimientoExplorer;
 
+    Animator anim;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -62,6 +64,8 @@ public class EnemyExplorerMovement : MonoBehaviour
         List<Nodo> aux2 = new List<Nodo>();
 
         cola = new Queue<Nodo>();
+
+        anim = GetComponent<Animator>();
 
         NextPosition();
 
@@ -95,7 +99,10 @@ public class EnemyExplorerMovement : MonoBehaviour
     void NextPosition()
     {
         finished = false;
-        
+        if (index > positions.Count)
+        {
+            Destroy(this.gameObject);
+        }
         actualPosition = positions[index];
     }
 
@@ -175,6 +182,7 @@ public class EnemyExplorerMovement : MonoBehaviour
             if (cantNodos == 0)
             {
                 move = false;
+                anim.SetBool("isRunning", false);
                 Debug.Log("Se ha terminado el turno ");
             }
         }
@@ -185,12 +193,14 @@ public class EnemyExplorerMovement : MonoBehaviour
             finished = true;
             index += 1;
             NextPosition();
+            anim.SetBool("isRunning", false);
+
             //Debug.Log("index : " + index);
-            
+
 
         }
-      
-     
+
+
     }
 
     // Update is called once per frame
@@ -204,12 +214,9 @@ public class EnemyExplorerMovement : MonoBehaviour
             if (finished == false) //Comprobar si tiene movimientos restantes
             {
                 MovementExplorer();
+                anim.SetBool("isRunning", true);
             }
         }
-        
-
-       
-
 
 
     }

@@ -33,6 +33,8 @@ public class EnemyMovement : MonoBehaviour
     public bool withNodeDecision;
     public Nodo decisionNode;
 
+    private Animator anim;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -49,6 +51,8 @@ public class EnemyMovement : MonoBehaviour
 
         cola = new Queue<Nodo>();
 
+
+        anim = GetComponent<Animator>();
         //aux = VisitingNeighbours(actual);
 
         EnemyVisibility();
@@ -94,6 +98,14 @@ public class EnemyMovement : MonoBehaviour
                 {
                     maxValue = n;
                    
+                }
+            }
+            if(n.objectInNode != null && n.objectInNode.tag == "Player")
+            {
+                if(n.objectInNode.GetComponent<PlayerStats>().numComponentesGrupo < this.gameObject.GetComponent<EnemyStats>().numComponentesGrupo)
+                {
+                    maxValue = n;
+                    return maxValue;
                 }
             }
            // if(n.objectInNode.tag == "CityPlayer")
@@ -184,79 +196,122 @@ public class EnemyMovement : MonoBehaviour
         return cercano;
     }
 
+
+
     public void MoveTo(Nodo n)
     {
-        Nodo anteriorAux = grid.NodeFromWorldPoint(transform.position);
-
-        this.gameObject.transform.position = Vector3.MoveTowards(this.gameObject.transform.position, n.worldPosition, EnemyStats.speed * Time.deltaTime);
-
-        Nodo actualAux = grid.NodeFromWorldPoint(transform.position);
-
-        if(actualAux != anteriorAux)
+        if(n != null)
         {
-            cantNodos--;
-            if(cantNodos == 0)
+            Nodo anteriorAux = grid.NodeFromWorldPoint(transform.position);
+
+
+            this.gameObject.transform.position = Vector3.MoveTowards(this.gameObject.transform.position, n.worldPosition, EnemyStats.speed * Time.deltaTime);
+
+
+            Nodo actualAux = grid.NodeFromWorldPoint(transform.position);
+
+            if (anteriorAux == null)
             {
-                move = false;
-                Debug.Log("Se ha terminado el turno ");
+                anteriorAux = actualAux;
             }
-        }
 
-        if (actualAux == n)
-        {
-            Debug.Log("Llegado al destino");
-            decisionNode = null;
-            withNodeDecision = false;
-            if (n.objectInNode != null)
+            if (actualAux != anteriorAux)
             {
-
-                if (n.objectInNode.tag == "Food")
+                cantNodos--;
+                if (cantNodos == 0)
                 {
-                    Debug.Log("Alimento ");
-                    if (EnemyExplorerMovement.nodosForVisitingFood.Contains(n)){
-                        EnemyExplorerMovement.nodosForVisitingFood.Remove(n);
-
-                    }
-                    n.objectInNode.gameObject.GetComponent<Influence>().DestroyThis();
-                    
-                    EnemyValues.alimentos += 30;
-                    this.gameObject.GetComponent<EnemyStats>().prioridad = Enumerados.Priorities.None;
+                    move = false;
+                    anim.SetBool("isRunning", false);
+                    Debug.Log("Se ha terminado el turno ");
                 }
+            }
 
-                else if(n.objectInNode.tag == "Resource")
+            if (actualAux == n)
+            {
+                Debug.Log("Llegado al destino");
+                decisionNode = null;
+                withNodeDecision = false;
+
+
+                foreach (GameObject g in EnemyValues.totalGroups)
                 {
-                    Debug.Log("resource ");
-                    if (EnemyExplorerMovement.nodosForVisitingResources.Contains(n))
+                    if (g != null)
                     {
-                        EnemyExplorerMovement.nodosForVisitingResources.Remove(n);
+                        Debug.Log("Distancia: " + Vector3.Distance(g.transform.position, this.transform.position));
 
+                        if (g == this.gameObject)
+                        {
+                            continue;
+                        }
+                        else if (Vector3.Distance(g.transform.position, this.transform.position) < 0.3f)
+                        {
+                            g.GetComponent<EnemyStats>().numComponentesGrupo += this.gameObject.GetComponent<EnemyStats>().numComponentesGrupo;
+                            EnemyValues.totalGroups.Remove(this.gameObject);
+                            Destroy(this.gameObject);
+                        }
                     }
-                    n.objectInNode.gameObject.GetComponent<Influence>().DestroyThis();
-                    
-                    EnemyValues.materiales += 30;
-                    this.gameObject.GetComponent<EnemyStats>().prioridad = Enumerados.Priorities.None;
+
                 }
 
-                else if(n.objectInNode.tag == "CityEnemy")
+                if (n.objectInNode != null)
                 {
-                    Debug.Log("Pa dentro");
-                    EnemyValues.numUnidadesCiudad += this.gameObject.GetComponent<EnemyStats>().numComponentesGrupo;
-                    EnemyValues.totalGroups.Remove(this.gameObject);
-                    Destroy(this.gameObject);
+
+                    if (n.objectInNode.tag == "Food")
+                    {
+                        Debug.Log("Alimento ");
+                        if (EnemyExplorerMovement.nodosForVisitingFood.Contains(n))
+                        {
+                            EnemyExplorerMovement.nodosForVisitingFood.Remove(n);
+
+                        }
+                        n.objectInNode.gameObject.GetComponent<Influence>().DestroyThis();
+
+                        EnemyValues.alimentos += 30;
+                        this.gameObject.GetComponent<EnemyStats>().prioridad = Enumerados.Priorities.None;
+                    }
+
+                    else if (n.objectInNode.tag == "Resource")
+                    {
+                        Debug.Log("resource ");
+                        if (EnemyExplorerMovement.nodosForVisitingResources.Contains(n))
+                        {
+                            EnemyExplorerMovement.nodosForVisitingResources.Remove(n);
+
+                        }
+                        n.objectInNode.gameObject.GetComponent<Influence>().DestroyThis();
+
+                        EnemyValues.materiales += 30;
+                        this.gameObject.GetComponent<EnemyStats>().prioridad = Enumerados.Priorities.None;
+                    }
+
+                    else if (n.objectInNode.tag == "CityEnemy")
+                    {
+                        Debug.Log("Pa dentro");
+                        EnemyValues.numUnidadesCiudad += this.gameObject.GetComponent<EnemyStats>().numComponentesGrupo;
+                        EnemyValues.totalGroups.Remove(this.gameObject);
+                        Destroy(this.gameObject);
+                    }
+                    else if(n.objectInNode.tag == "CityPlayer")
+                    {
+                        n.objectInNode.GetComponent<PlayerManager>().GameOver();
+                    }
+
+
                 }
-                
-            }
-            else
-            {
-                n.objectInNode = this.gameObject;
+
+                else
+                {
+                    n.objectInNode = this.gameObject;
+
+                }
+                //HAY QUE HACER UNA FUNCION QUE RESETEE EL NODO AL QUE VA DESPUES DE QUE LLEGUE
 
             }
-            //HAY QUE HACER UNA FUNCION QUE RESETEE EL NODO AL QUE VA DESPUES DE QUE LLEGUE
+            EnemyVisibility();
+
+
 
         }
-        EnemyVisibility();
-       
-
 
     }
     //Para que sea un nuevo turno se llama a esta función y se pone a true el bool move
@@ -330,8 +385,11 @@ public class EnemyMovement : MonoBehaviour
         //EnemyVisibility();
         if (move)
         {
-            if(withNodeDecision && decisionNode != null)
+            anim.SetBool("isRunning", true);
+
+            if (withNodeDecision && decisionNode != null)
             {
+
                 MoveTo(decisionNode);
             }
             else

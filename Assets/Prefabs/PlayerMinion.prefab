@@ -1018,7 +1018,7 @@ Transform:
   m_GameObject: {fileID: 75846356189152483}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: -0.53, z: -40.3}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 2, y: 2, z: 2}
   m_Children:
   - {fileID: 75846356189452427}
   - {fileID: 75846356189452493}
@@ -1039,7 +1039,7 @@ Animator:
   m_GameObject: {fileID: 75846356189152483}
   m_Enabled: 1
   m_Avatar: {fileID: 9000000, guid: bbc48b21848b5d74292137cacc5d3b74, type: 3}
-  m_Controller: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 9b6dac1522701fd45874995951dedab7, type: 2}
   m_CullingMode: 1
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -1062,8 +1062,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   colorReachable: {r: 0.9150943, g: 0, b: 0.7712294, a: 0}
   pathColor: {r: 0.9528302, g: 0.09438412, b: 0.09438412, a: 0}
+  final: 0
   isMoving: 0
   cantNodos: 5
+  manager: {fileID: 0}
 --- !u!65 &5165068645925509188
 BoxCollider:
   m_ObjectHideFlags: 0

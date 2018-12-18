@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class PlayerManager : MonoBehaviour
 {
-    public GameObject FinishButton, CityPanel, RecoursesPanel, MergePanel, UnitPanel, SeparatePanel, Button, GameManager;
+    public GameObject FinishButton, CityPanel, RecoursesPanel, MergePanel, UnitPanel, SeparatePanel, Button, GameManager,gAMEoVERpANEL;
     public Text UnitMovement, BarraconText, UnitText, RecourseText,UnitCity;
     public Slider SepSlider,MergeSlider;
     public int Food, Resources, Units, MaxUnits, UnitsInCity, LevelBarracon,aux;
@@ -189,5 +189,9 @@ public class PlayerManager : MonoBehaviour
     {
         UnitsInCity += Group.GetComponent<PlayerStats>().numComponentesGrupo;
         Destroy(Group);
+    }
+    public void GameOver()
+    {
+        gAMEoVERpANEL.SetActive(true);
     }
 }

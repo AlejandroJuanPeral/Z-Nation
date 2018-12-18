@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class BottonScript : MonoBehaviour
@@ -51,6 +52,10 @@ public class BottonScript : MonoBehaviour
     {
         Manager.GetComponent<PlayerManager>().UpdateBarracon();
 
+    }
+    public void Restart()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 
 }
