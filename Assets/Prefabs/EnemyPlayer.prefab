@@ -339,7 +339,7 @@ Transform:
   m_GameObject: {fileID: 8402560316350450708}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 4, y: 4, z: 4}
+  m_LocalScale: {x: 7, y: 7, z: 7}
   m_Children:
   - {fileID: 8402560316350353458}
   - {fileID: 8402560316350353408}
@@ -399,6 +399,19 @@ MonoBehaviour:
   move: 0
   allVisible: []
   ciudadPropia: {fileID: 0}
+  withNodeDecision: 0
+  decisionNode:
+    prefab: {fileID: 0}
+    IsWall: 0
+    worldPosition: {x: 0, y: 0, z: 0}
+    gridX: 0
+    gridY: 0
+    gCost: 0
+    hCost: 0
+    resourceCost: 0
+    objectInNode: {fileID: 0}
+    isVisibleEnemy: 0
+    isVisiblePlayer: 0
 --- !u!114 &919219302
 MonoBehaviour:
   m_ObjectHideFlags: 0

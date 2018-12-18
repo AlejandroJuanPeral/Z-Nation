@@ -64,8 +64,8 @@ public class Decisiones : MonoBehaviour
         {
             ProcesarGrupoParado(Enumerados.Priorities.Alimento);
         }
-
-        DecisionGrupo();
+        EnemyValues.numUnidadesCiudad = unidadesDentroCiudad;
+        EnemyValues.totalGroups = grupos;
 
     }
 
@@ -303,7 +303,7 @@ public class Decisiones : MonoBehaviour
         Group.GetComponent<EnemyStats>().prioridad = prioridad;
        	Group.GetComponent<EnemyStats>().numComponentesGrupo = num;
         unidadesDentroCiudad -= num;
-        Group.GetComponent<EnemyMovement>().move = true;
+        //Group.GetComponent<EnemyMovement>().move = true;
         grupos.Add(Group);
     }
 

@@ -26,11 +26,13 @@ public class EnemyValues : MonoBehaviour
     
     public IEnumerator TurnoEnemigo()
     {
-      
+        decision.DecisionGrupo();
+        yield return new WaitForSeconds(3f);
+
         decision.DecisionesCiudad();
         ///CORRRUTINA
         /////llamar start player turn
-        yield return new WaitForSeconds(5f);
+        yield return new WaitForSeconds(2f);
         Resources.text = "Alimento: " + alimentos.ToString("0000") + " Rec.Construcción: " + materiales.ToString("0000") + '\n' + " Unidades: " + numTotalUnidades + " / " + cantBarracones*3;
         player.PlayerTurn();
     }
