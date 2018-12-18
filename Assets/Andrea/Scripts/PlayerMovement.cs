@@ -35,7 +35,11 @@ public class PlayerMovement : MonoBehaviour
 
         actual = grid.NodeFromWorldPoint(transform.position);
         actual.prefab.GetComponent<Renderer>().material.color = pathColor;
-        actual.objectInNode = this.gameObject;
+        if(actual.objectInNode == null)
+        {
+            actual.objectInNode = this.gameObject;
+
+        }
         VisitingNeighbours(actual);
 
     }
@@ -101,7 +105,11 @@ public class PlayerMovement : MonoBehaviour
 
         Nodo actualAux = grid.NodeFromWorldPoint(transform.position);
 
-        anteriorAux.objectInNode = null;
+        if(anteriorAux.objectInNode == this.gameObject)
+        {
+            anteriorAux.objectInNode = null;
+
+        }
 
         if (actualAux != anteriorAux)
         {
@@ -114,9 +122,14 @@ public class PlayerMovement : MonoBehaviour
             }
         }
 
-        if (this.gameObject.transform.position == n.worldPosition && final == false)
+        if (actualAux.worldPosition == n.worldPosition && final == false)
         {
-            if(n.objectInNode.tag == "Food")
+            if(n.objectInNode == null)
+            {
+                n.objectInNode = this.gameObject;
+            }
+
+            else if(n.objectInNode.tag == "Food")
             {
                 manager.GetComponent<PlayerManager>().TakeFood(30);
                 n.objectInNode.GetComponent<Influence>().recolectado = true;
@@ -142,8 +155,9 @@ public class PlayerMovement : MonoBehaviour
             }
             else if(n.objectInNode.tag == "CityPlayer")
             {
-                manager.GetComponent<PlayerManager>().UnitsInCity += this.gameObject.GetComponent<PlayerStats>().numComponentesGrupo;
-                Destroy(this.gameObject);
+                Debug.Log("Dentro ciudad");
+
+                manager.GetComponent<PlayerManager>().EnterCity(this.gameObject);
             }
             else if(n.objectInNode.tag == "CityEnemy")
             {

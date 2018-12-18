@@ -283,6 +283,11 @@ public class EnemyMovement : MonoBehaviour
                 aux[i].isVisibleEnemy = true;
                 cola.Enqueue(aux[i]);
 
+                if(aux[i].objectInNode == null)
+                {
+                    continue;
+                }
+
                 if(aux[i].objectInNode.tag == "Food")
                 {
                     if (!EnemyExplorerMovement.nodosForVisitingFood.Contains(aux[i]))

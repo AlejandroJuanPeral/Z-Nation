@@ -13,10 +13,16 @@ public class PlayerManager : MonoBehaviour
     public GameObject GroupPrefab;
 
     public EnemyValues enemigo;
+
+    public Grid grid;
+
+    public Nodo nodoCiudad;
+
     // Start is called before the first frame update
     void Start()
     {
-        
+        grid = GameObject.Find("GameManager").GetComponent<Grid>();
+
         Food = 50;
         Resources = 30;
         Units = 0;
@@ -25,10 +31,15 @@ public class PlayerManager : MonoBehaviour
         aux = 0;
         RecourseText.text = "Alimento: " + Food.ToString("0000") + " Rec.Construcción: " + Resources.ToString("0000") + '\n' + " Unidades: " + Units + " / " + MaxUnits;
 
+        nodoCiudad = grid.NodeFromWorldPoint(this.transform.position);
+        nodoCiudad.objectInNode = this.gameObject;
+
         PlayerTurn();
     }
     private void Update()
     {
+        nodoCiudad.objectInNode = this.gameObject;
+        
         if (Groups.Count > 0 && Groups[aux] != null)
         {
             UnitMovement.text = "Movimiento " + Groups[aux].GetComponent<PlayerMovement>().cantNodos;
@@ -159,6 +170,20 @@ public class PlayerManager : MonoBehaviour
         MergePanel.SetActive(true);
         MergeSlider.value = Group1.GetComponent<PlayerStats>().numComponentesGrupo;
         MergeSlider.maxValue = Group2.GetComponent<PlayerStats>().numComponentesGrupo+ Group1.GetComponent<PlayerStats>().numComponentesGrupo;
+        if(Group1.GetComponent<PlayerStats>().numComponentesGrupo == 0)
+        {
+            Destroy(Group1.gameObject);
+            grid.NodeFromWorldPoint(Group2.transform.position).objectInNode = Group2;
+            
+            
+        }
+        else if (Group2.GetComponent<PlayerStats>().numComponentesGrupo == 0)
+        {
+            Destroy(Group2.gameObject);
+            grid.NodeFromWorldPoint(Group1.transform.position).objectInNode = Group1;
+
+
+        }
     }
     public void EnterCity(GameObject Group)
     {
