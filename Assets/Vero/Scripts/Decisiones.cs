@@ -20,15 +20,22 @@ public class Decisiones : MonoBehaviour
     public GameObject explorer;
     int indexExplorer = 0;
 
+    public Nodo nodoCiudadEnemiga;
+
     private void Start()
     {
         coste_Barracon = CosteBarracon();
         grid = GameObject.Find("GameManager").GetComponent<Grid>();
         EnemyValues.explorer = explorer;
+
+        nodoCiudadEnemiga = grid.NodeFromWorldPoint(this.transform.position);
+        nodoCiudadEnemiga.objectInNode = this.gameObject;
     }
     //Ejecutarse mientras tengamos material y alimento
     public void DecisionesCiudad() {
-    	if (unidadesDentroCiudad > 10)
+        nodoCiudadEnemiga.objectInNode = this.gameObject;
+
+        if (unidadesDentroCiudad > 10)
         {
         	EnviarAtaque();
 		}
@@ -73,7 +80,7 @@ public class Decisiones : MonoBehaviour
 
     public void DecisionGrupo() {
 
-
+        nodoCiudadEnemiga.objectInNode = this.gameObject;
         if (UnidadesFueraCiudad())
         {
             foreach (GameObject grupo in grupos)

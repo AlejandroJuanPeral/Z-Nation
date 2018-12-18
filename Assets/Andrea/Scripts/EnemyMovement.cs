@@ -236,8 +236,21 @@ public class EnemyMovement : MonoBehaviour
                     EnemyValues.materiales += 30;
                     this.gameObject.GetComponent<EnemyStats>().prioridad = Enumerados.Priorities.None;
                 }
+
+                else if(n.objectInNode.tag == "CityEnemy")
+                {
+                    Debug.Log("Pa dentro");
+                    EnemyValues.numUnidadesCiudad += this.gameObject.GetComponent<EnemyStats>().numComponentesGrupo;
+                    EnemyValues.totalGroups.Remove(this.gameObject);
+                    Destroy(this.gameObject);
+                }
+                
             }
-            n.objectInNode = this.gameObject;
+            else
+            {
+                n.objectInNode = this.gameObject;
+
+            }
             //HAY QUE HACER UNA FUNCION QUE RESETEE EL NODO AL QUE VA DESPUES DE QUE LLEGUE
 
         }
